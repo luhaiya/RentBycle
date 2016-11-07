@@ -1,11 +1,14 @@
 <?php
 	include 'dataBaseConfig.php';
-	class dataBaseOperate
+	class dBOperate
 	{
 		private $link;
-		function dataBaseOperate()
+		private $tableName;
+		public function __construct($tabName)
 		{
 			global $link;
+			global $tableName;
+			$tableName=$tabName;
 			$link = new mysqli(servename,username,password,dbname);
 			if($link->connect_error)
 			{
@@ -15,9 +18,10 @@
 			}
 		}
 		
-		function insertData($info,$tableName)
+		function insertData($info)
 		{
 			global $link;
+			global $tableName;
 			$column=null;
 			$value =null;
 			foreach($info as $x=>$x_value)//拼接命令
@@ -40,24 +44,26 @@
 				echo "Error: " . $sql . "<br>" . $link->error;
 			}
 		}
-		function updateData($info,$KEY,$tableName)
+		function updateData($info,$KEY)
 		{
 			global $link;
+			global $tableName;
 			$valueChange=null;
 			foreach($info as $x=>$x_value)//拼接命令
 			{
 				$x_value="'".$x_value."'";
-				$valueChange=$x."=".$x_value.",";
+				$valueChange=$valueChange.$x."=".$x_value.",";
 			}
 			$valueChange=substr($valueChange,0,strlen($valueChange)-1);
 			$majorKey=null;
 			foreach($KEY as $y=>$y_value)
 			{
 				$y_value="'".$y_value."'";
-				$majorKey=$y."=".$y_value.",";
+				$majorKey=$majorKey.$y."=".$y_value.",";
 			}
 			$majorKey=substr($majorKey,0,strlen($majorKey)-1);
 			$sql= "UPDATE $tableName SET $valueChange WHERE $majorKey";
+			echo $sql."<br>";
 			if($link->query($sql))
 			{
 				echo "新信息修改成功";
