@@ -45,6 +45,7 @@ class Bycle{
 		if(empty($this->attr['imgUrl'])){
 			return errorInfo(40002);
 		}else{
+			$this->saveImgFromPost();
 			$this->attr['imgUrl'] = json_encode($this->attr['imgUrl']);
 			$this->attr['tags'] = json_encode($this->attr['tags']);
 			$bycleId = $db->insert($this->attr);
