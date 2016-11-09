@@ -36,7 +36,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         	views:{
         		'':{
         			templateUrl: "template/loginin.html"
-        		}
+        		},
+                'topbar@login':{
+                    templateUrl: "template/topbar.html"
+                }
         	}
         })
         .state('sign',{
@@ -44,7 +47,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         	views:{
         		'':{
         			templateUrl: "template/signin.html"
-        		}
+        		},
+                'topbar@sign':{
+                    templateUrl: 'template/topbar.html'
+                }
         	}
         })
 });

@@ -1,2 +1,46 @@
 <div style="height:100px;"></div>
-<div>this is bycle info lists</div>
+<div class="bycleInfo">
+<div class="container">
+<div class="row" style="font-size:20px;border-style:solid none; border-width:2px;border-color:#FFFFFF">
+   <div class="col-md-1"><strong>品牌:</strong></div>	
+   <div class="col-md-1"><div class="mouseover" onclick="selectBrand(1)">品牌1</div></div>
+   <div class="col-md-1"><div class="mouseover" onclick="selectBrand(2)">品牌2</div></div>
+   <div class="col-md-1"><div class="mouseover" onclick="selectBrand(3)">品牌3</div></div>
+</div>
+
+<div class="row" style="font-size:20px; border-bottom-style:solid; border-width:2px;border-color:#FFFFFF">
+   <div class="col-md-1"><strong>样式:</strong></div>	
+   <div class="col-md-1"><div class="mouseover" onclick="selectStyle(1)">样式1</div></div>
+   <div class="col-md-1"><div class="mouseover" onclick="selectStyle(2)">样式2</div></div>
+   <div class="col-md-1"><div class="mouseover" onclick="selectStyle(3)">样式3</div></div>
+</div>
+ <script>
+ function selectBrand(brand)
+     {
+ 	     window.brands=brand;
+     }
+
+ function selectStyle(style)
+     {
+ 	     window.styles=style;
+     }
+ </script>
+
+
+<div class="row" style="font-size:20px; border-bottom-style:solid;border-width:2px;border-color:#FFFFFF">
+   <div class="col-md-1"><span style="color:blue;font-style:italic;">查找：</span></div>	
+   <div class="col-md-1"></div>
+   <div class="col-md-1"></div>
+   <div class="col-md-1"></div>
+</div>
+
+<div class="row" style="padding:50px">
+   <div class="col-md-4"><div class="mouseover"><img class="img-responsive" src="./src/imgs/by1.jpg" width="300" height="auto"alt=""></div></div>	
+   <div class="col-md-4"><div class="mouseover"><img class="img-responsive" src="./src/imgs/by2.jpg" width="300" height="auto" alt=""></div></div>
+   <div class="col-md-4"><div class="mouseover"><img class="img-responsive" src="./src/imgs/by3.jpg" width="300" height="auto" alt=""></div></div>
+</div>
+ <div style="color:red;float:right"><strong>ps：点击图片了解详情</strong></div>
+
+
+
+</div></div>
