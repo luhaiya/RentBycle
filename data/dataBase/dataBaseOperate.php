@@ -12,9 +12,22 @@
 			$link = new mysqli(servename,username,password,dbname);
 			if($link->connect_error)
 			{
-				die("Êý¾Ý¿âÁ¬½ÓÊ§°Ü".$link->connect_error);
+				die("ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½".$link->connect_error);
 			}else {
-				echo "Êý¾Ý¿âÁ¬½Ó³É¹¦";
+				echo "ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½Ó³É¹ï¿½";
+			}
+		}
+		
+		public function query($sql){
+			$result = mysql_query($sql,$this->link);
+			$temp=array();
+			if($result){
+				while($res=mysql_fetch_assoc($result)) {
+					$temp[]=$res;
+				}
+				return $temp;
+			}else{
+				return false;
 			}
 		}
 		
@@ -24,21 +37,21 @@
 			global $tableName;
 			$column=null;
 			$value =null;
-			foreach($info as $x=>$x_value)//Æ´½ÓÃüÁî
+			foreach($info as $x=>$x_value)//Æ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 // 				$x="'".$x."'";
 				$column=$column.$x.",";
 				$x_value="'".$x_value."'";
 				$value=$value.$x_value.",";
 			}
-			$column=substr($column, 0,strlen($column)-1);//È¥µô×îºóµÄ¶ººÅ
+			$column=substr($column, 0,strlen($column)-1);//È¥ï¿½ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½
 			$value=substr($value,0,strlen($value)-1);
 			$sql = "INSERT INTO $tableName($column) VALUES($value)";
 			echo $sql;
 
 			if($link->query($sql))
 			{
-				echo "ÐÂÐÅÏ¢²åÈë³É¹¦";
+				echo "ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½É¹ï¿½";
 			}else
 			{
 				echo "Error: " . $sql . "<br>" . $link->error;
@@ -49,7 +62,7 @@
 			global $link;
 			global $tableName;
 			$valueChange=null;
-			foreach($info as $x=>$x_value)//Æ´½ÓÃüÁî
+			foreach($info as $x=>$x_value)//Æ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				$x_value="'".$x_value."'";
 				$valueChange=$valueChange.$x."=".$x_value.",";
@@ -66,7 +79,7 @@
 			echo $sql."<br>";
 			if($link->query($sql))
 			{
-				echo "ÐÂÐÅÏ¢ÐÞ¸Ä³É¹¦";
+				echo "ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Þ¸Ä³É¹ï¿½";
 			}else
 			{
 				echo "Error: " . $sql . "<br>" . $link->error;
