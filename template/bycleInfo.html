@@ -1,40 +1,24 @@
 <script>
-window.brand = [];
+$("#topbar").children("li").eq(1).addClass('active');
+$("#topbar").children("li").eq(0).removeClass('active');
 </script>
 <div style="height:100px;"></div>
-<div class="bycleInfo">
+<div class="bycleInfo" ng-controller="bycleinfoCtrl">
 <div class="container">
 <div class="row" style="font-size:20px;border-style:solid none; border-width:2px;border-color:#FFFFFF">
    <div class="col-md-1"><strong>品牌:</strong></div>	
-   <div class="col-md-1"><div class="mouseover" onclick="selectBrand(1)">品牌1</div></div>
-   <div class="col-md-1"><div class="mouseover" onclick="selectBrand(2)">品牌2</div></div>
-   <div class="col-md-1"><div class="mouseover" onclick="selectBrand(3)">品牌3</div></div>
+   <div class="col-md-1" ng-repeat="x in brandList"><div class="mouseover" ng-click="selectBrand($index)" ng-bind="x"></div>
+   </div>
 </div>
-
 <div class="row" style="font-size:20px; border-bottom-style:solid; border-width:2px;border-color:#FFFFFF">
    <div class="col-md-1"><strong>样式:</strong></div>	
-   <div class="col-md-1"><div class="mouseover" onclick="selectStyle(1)">样式1</div></div>
-   <div class="col-md-1"><div class="mouseover" onclick="selectStyle(2)">样式2</div></div>
-   <div class="col-md-1"><div class="mouseover" onclick="selectStyle(3)">样式3</div></div>
+   <div class="col-md-1" ng-repeat="y in typeList"><div class="mouseover" ng-click="selectType($index)" ng-bind="y"></div>
+   </div>
 </div>
- <script>
- function selectBrand(brand)
-     {
- 	     window.brands=brand;
-     }
-
- function selectStyle(style)
-     {
- 	     window.styles=style;
-     }
- </script>
-
-
 <div class="row" style="font-size:20px; border-bottom-style:solid;border-width:2px;border-color:#FFFFFF">
    <div class="col-md-1"><span style="color:blue;font-style:italic;">查找：</span></div>	
-   <div class="col-md-1"></div>
-   <div class="col-md-1"></div>
-   <div class="col-md-1"></div>
+   <div class="col-md-1"><span ng-bind="choices1"></span></div>
+   <div class="col-md-1"><span ng-bind="choices2"></span></div>
 </div>
 
 <div class="row" style="padding:50px">

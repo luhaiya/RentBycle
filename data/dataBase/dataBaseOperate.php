@@ -1,67 +1,56 @@
 <?php
+header("Content-type: text/html; charset=utf-8");
 	class dBOperate
 	{
 		private $link;
 		private $tableName;
 		public function __construct($tabName)
 		{
-			global $link;
-			global $tableName;
-			$tableName=$tabName;
-			$link = new mysqli(servename,username,password,dbname);
-			if($link->connect_error)
+			$this->tableName=$tabName;
+			$this->link = new mysqli(servename,username,password,dbname);
+			if($this->link->connect_error)
 			{
-				die("���ݿ�����ʧ��".$link->connect_error);
+				return false;
 			}else {
-				echo "���ݿ����ӳɹ�";
+				return true;
 			}
 		}
 		
 		public function query($sql){
-			$result = mysql_query($sql,$this->link);
-			$temp=array();
-			if($result){
-				while($res=mysql_fetch_assoc($result)) {
-					$temp[]=$res;
-				}
-				return $temp;
-			}else{
+			$result = $this->link->query($sql);
+			if($result === false){
 				return false;
+			}else{
+				$data = array();
+				$result->data_seek(0); #重置指针到起始
+				while($row = $result->fetch_assoc())
+				{
+					$data[] = $row;
+				}
+				return $data;
 			}
 		}
 		
 		function insertData($info)
 		{
-			global $link;
-			global $tableName;
 			$column=null;
 			$value =null;
-			foreach($info as $x=>$x_value)//ƴ������
+			foreach($info as $x=>$x_value)
 			{
 // 				$x="'".$x."'";
 				$column=$column.$x.",";
 				$x_value="'".$x_value."'";
 				$value=$value.$x_value.",";
 			}
-			$column=substr($column, 0,strlen($column)-1);//ȥ�����Ķ���
+			$column=substr($column, 0,strlen($column)-1);
 			$value=substr($value,0,strlen($value)-1);
-			$sql = "INSERT INTO $tableName($column) VALUES($value)";
-			echo $sql;
-
-			if($link->query($sql))
-			{
-				echo "����Ϣ����ɹ�";
-			}else
-			{
-				echo "Error: " . $sql . "<br>" . $link->error;
-			}
+			$sql = "INSERT INTO $this->tableName($column) VALUES($value)";
+			$this->link->query($sql);//TODO:
 		}
 		function updateData($info,$KEY)
 		{
-			global $link;
-			global $tableName;
 			$valueChange=null;
-			foreach($info as $x=>$x_value)//ƴ������
+			foreach($info as $x=>$x_value)
 			{
 				$x_value="'".$x_value."'";
 				$valueChange=$valueChange.$x."=".$x_value.",";
@@ -74,15 +63,7 @@
 				$majorKey=$majorKey.$y."=".$y_value.",";
 			}
 			$majorKey=substr($majorKey,0,strlen($majorKey)-1);
-			$sql= "UPDATE $tableName SET $valueChange WHERE $majorKey";
-			echo $sql."<br>";
-			if($link->query($sql))
-			{
-				echo "����Ϣ�޸ĳɹ�";
-			}else
-			{
-				echo "Error: " . $sql . "<br>" . $link->error;
-			}
+			$sql= "UPDATE $this->tableName SET $valueChange WHERE $majorKey";
+			$this->link->query($sql);
 		}
 	}
-?>

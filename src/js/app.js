@@ -42,15 +42,4 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
         	}
         })
-        .state('sign',{
-        	url:'/sign',
-        	views:{
-        		'':{
-        			templateUrl: "template/signin.html"
-        		},
-                'topbar@sign':{
-                    templateUrl: 'template/topbar.html'
-                }
-        	}
-        })
 });

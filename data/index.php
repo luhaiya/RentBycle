@@ -10,15 +10,14 @@
  **10002：获取自行车的详细信息
  **10003：获取用户的详细信息（加密）
  **10004:用户手机号登录
- **10005:用户手机号注册
  **/
 require_once './config/dataBaseConfig.php';
 include 'classBycle.php';
 $data = file_get_contents("php://input",true);
 $data=json_decode($data,true);
-$command=$data['cid']?$data['cid']:0;
-$userId=$data['uid']?$data['uid']:0;
-$token=$data['token']?$data['token']:'';
+$command=isset($data['cid'])?$data['cid']:0;
+$userId=isset($data['uid'])?$data['uid']:0;
+$token=isset($data['token'])?$data['token']:'';
 if(!$command){
 	$command = $_REQUEST['cid']?$_REQUEST['cid']:0;
 	$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
@@ -62,21 +61,14 @@ switch($command){
 		$attr = array('tel'=>$tel,'pwd'=>md5($pwd));
 		$res = User::loginin($attr);
 		if($res){
-			echo $res;
-			$res = json_decode($res,true);
 			session_start();
 			$_SESSION['uid'] = $res[0]['userid'];
 			$_SESSION['token'] = $res[0]['token'];
+			$res = json_encode($res);
+			echo $res;
 		}else{
 			echo false;
 		}
-		break;
-	case 10005:
-		$tel = $data['tel'];
-		$pwd = $data['pwd'];
-		$attr = array('tel'=>$tel,'pwd'=>md5($pwd));
-		$res = User::signin($attr);
-		echo $res;
 		break;
 	default:
 		echo errorInfo(40000);

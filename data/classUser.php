@@ -57,22 +57,11 @@ class User{
 	}
 	public function loginin($attr){
 		if($attr['tel']&&$attr['pwd']){
-			$sql = "select * from userinfo where tel='".$attr['tel']."' and pwd='".md5($attr['pwd'])."'";
+			$sql = "select * from userinfo where tel='".$attr['tel']."' and pwd='".$attr['pwd']."'";
 			$db = new dBoperate('userinfo');
 			$res = $db->query($sql);
 			if(!empty($res)){
-				return json_encode($res);
-			}else{
-				return false;
-			}
-		}
-	}
-	public function signin($attr){
-		if($attr['tel']&&$attr['pwd']){
-			$db = new dBoperate('userinfo');
-			$res = $db->insertData($attr);
-			if($res){
-				return true;
+				return $res;
 			}else{
 				return false;
 			}
