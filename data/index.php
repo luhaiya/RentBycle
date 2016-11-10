@@ -9,11 +9,21 @@
  **10001：获取自行车的列表信息
  **10002：获取自行车的详细信息
  **10003：获取用户的详细信息（加密）
+ **10004:用户手机号登录
+ **10005:用户手机号注册
  **/
+require_once './config/dataBaseConfig.php';
 include 'classBycle.php';
-$command = $_REQUEST['cid']?$_REQUEST['cid']:0;
-$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
-$token = $_REQUEST['token']?$_REQUEST['token']:0;
+$data = file_get_contents("php://input",true);
+$data=json_decode($data,true);
+$command=$data['cid']?$data['cid']:0;
+$userId=$data['uid']?$data['uid']:0;
+$token=$data['token']?$data['token']:'';
+if(!$command){
+	$command = $_REQUEST['cid']?$_REQUEST['cid']:0;
+	$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
+	$token = $_REQUEST['token']?$_REQUEST['token']:'';
+}
 $attr = array('userid'=>$userId,'token'=>$token);
 $checkUser = User::checkAndQueryUserInfo($attr);
 switch($command){
@@ -45,6 +55,28 @@ switch($command){
 	case 10003:
 		//TODO:查询用户的信息，引入用户类
 		echo $checkUser;
+		break;
+	case 10004:
+		$tel = $data['tel'];
+		$pwd = $data['pwd'];
+		$attr = array('tel'=>$tel,'pwd'=>md5($pwd));
+		$res = User::loginin($attr);
+		if($res){
+			echo $res;
+			$res = json_decode($res,true);
+			session_start();
+			$_SESSION['uid'] = $res[0]['userid'];
+			$_SESSION['token'] = $res[0]['token'];
+		}else{
+			echo false;
+		}
+		break;
+	case 10005:
+		$tel = $data['tel'];
+		$pwd = $data['pwd'];
+		$attr = array('tel'=>$tel,'pwd'=>md5($pwd));
+		$res = User::signin($attr);
+		echo $res;
 		break;
 	default:
 		echo errorInfo(40000);

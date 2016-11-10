@@ -38,7 +38,7 @@ class Bycle{
 		$this->attr['brand'] = $string;
 		return true;
 	}
-	public function addTags($string){
+	public function addPrice($string){
 		$this->attr['price'] = $string;
 		return true;
 	}

@@ -1,5 +1,4 @@
 <?php
-	include 'dataBaseConfig.php';
 	class dBOperate
 	{
 		private $link;
