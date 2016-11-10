@@ -64,6 +64,9 @@ function errorInfo($errid){
 		case 40004:
 			$error['desc']="获取自行车信息失败";
 			break;
+		case 40005:
+			$error['desc']='微信授权失败';
+			break;
 		default:
 			$error['desc']='未知错误';
 			break;

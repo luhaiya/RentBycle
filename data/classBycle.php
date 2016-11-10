@@ -6,23 +6,25 @@
  **
  **/
 require_once 'commonFunc.php';
+require_once 'classUser.php';
 require_once './dataBase/dataBaseOperate.php';
 class Bycle{
 	private $attr;
 	public function __construct($userId){
 		$this->attr = array(
-				'userId'=>$userId,
-				'imgUrl'=>array(),
+				'userid'=>$userId,
+				'picurl'=>array(),
 				'tags'=>array(),
 				'brand'=>'',
 				'price'=>'',
+				'state'=>1,
 		);
 	}
 	public function saveImgFromPost(){
 		if($_FILE["img"]["name"]){
 			$filename = "../src/imgs/User/" . createStringByTime() . 'jpg';
 			move_uploaded_file($_FILES["img"]["tmp_name"],$filename);
-			$this->attr['imgUrl'][] = $filename;
+			$this->attr['picurl'][] = $filename;
 			return true;
 		}else{
 			return errorInfo(40001);
@@ -42,14 +44,15 @@ class Bycle{
 	}
 	public function signBycle(){
 		$db = new dBoperate('BycleInfo');
-		if(empty($this->attr['imgUrl'])){
+		if(empty($this->attr['picurl'])){
 			return errorInfo(40002);
 		}else{
 			$this->saveImgFromPost();
-			$this->attr['imgUrl'] = json_encode($this->attr['imgUrl']);
+			$this->attr['picurl'] = json_encode($this->attr['picurl']);
 			$this->attr['tags'] = json_encode($this->attr['tags']);
-			$bycleId = $db->insert($this->attr);
-			if($id){
+			$bycleId = $db->insertData($this->attr);
+			if($bycleId){
+				User::upgrade($this->attr);
 				return $bycleId;
 			}else{
 				return errorInfo(40003);
@@ -57,8 +60,8 @@ class Bycle{
 		}
 	}
 	public function getInfoByBikeId($bycleId){
-		$db = new dBoperate();
-		$sql = 'select * from BycleInfo where id='.$bycleId;
+		$db = new dBoperate('BycleInfo');
+		$sql = 'select * from BycleInfo where bikeid='.$bycleId;
 		$res = $db->query($sql);
 		if(!empty($res)){
 			return json_encode($res);
@@ -67,7 +70,7 @@ class Bycle{
 		}	
 	}
 	public function getInfoByUserId($uId){
-		$db = new dBoperate();
+		$db = new dBoperate('BycleInfo');
 		$sql = 'select * from BycleInfo where userid='.$uId;
 		$res = $db->query($sql);
 		if(!empty($res)){
@@ -81,7 +84,7 @@ class Bycle{
 	}
 	public function getBikeList(){
 	//TODO:搜索出符合用户需求的自行车
-		$db = new dBoperate();
+		$db = new dBoperate('BycleInfo');
 		$sql = 'select * from BycleInfo';
 		$res = $db->query($sql);
 		if(!empty($res)){

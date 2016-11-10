@@ -12,10 +12,13 @@
  **/
 include 'classBycle.php';
 $command = $_REQUEST['cid']?$_REQUEST['cid']:0;
+$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
+$token = $_REQUEST['token']?$_REQUEST['token']:0;
+$attr = array('userid'=>$userId,'token'=>$token);
+$checkUser = User::checkAndQueryUserInfo($attr);
 switch($command){
 	case 10000:
-		$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
-		if($userId){
+		if(!empty($checkUser)){
 			$bike = new Bycle($userId);
 			echo $bike->signBycle();
 		}else{
@@ -23,8 +26,7 @@ switch($command){
 		}
 		break;
 	case 10001:
-		$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
-		if($userId){
+		if(!empty($checkUser)){
 			$bike = new Bycle($userId);
 			echo $bike->getBikeList();
 		}else{
@@ -32,9 +34,8 @@ switch($command){
 		}
 		break;
 	case 10002:
-		$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
 		$bikeId = $_REQUEST['bid']?$_REQUEST['bid']:0;
-		if($userId){
+		if(!empty($checkUser)){
 			$bike = new Bycle($userId);
 			echo $bike->getInfoByBikeId($bikeId);
 		}else{
@@ -43,6 +44,7 @@ switch($command){
 		break;
 	case 10003:
 		//TODO:查询用户的信息，引入用户类
+		echo $checkUser;
 		break;
 	default:
 		echo errorInfo(40000);
