@@ -64,8 +64,24 @@ switch($command){
 			session_start();
 			$_SESSION['uid'] = $res[0]['userid'];
 			$_SESSION['token'] = $res[0]['token'];
+			$_SESSION['tel'] = $res[0]['tel'];
 			$res = json_encode($res);
 			echo $res;
+		}else{
+			echo false;
+		}
+		break;
+	case 10005:
+		$tel = $data['tel'];
+		$pwd = $data['pwd'];
+		$attr = array('tel'=>$tel,'pwd'=>md5($pwd),'userid'=>$userId);
+		if(!empty($checkUser)){
+			$res = User::setting($attr);
+			if($res){
+				echo true;
+			}else{
+				echo false;
+			}
 		}else{
 			echo false;
 		}

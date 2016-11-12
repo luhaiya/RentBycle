@@ -1,0 +1,39 @@
+<div ui-view="topbar"></div>
+<div class="loginin" ng-controller="selfCtrl"><div class="container">
+<div class="row">	
+<div class="col-md-12" style="margin-bottom:50px;text-align:center;">
+    <div class="row">
+		<h3><strong>您的账户信息 </strong></h3>
+	</div>
+	<div class="row">
+		<div class="col-md-12">用户类型：租户/车主</div>
+		<div class="col-md-12">联系方式：13333333333</div>
+		<div class="col-md-12">是否微信：是/否</div>
+		<div class="col-md-12">是否密码：是/否</div>
+		<div class="col-md-12">是否邮箱：是/否</div>
+	</div>
+	<hr style="border:solid white 2px;"></hr> 
+	<div class="row">
+    <h3><strong>设置手机号码及密码</strong></h3>
+    </div>
+	<div class="row">
+       	<div class="col-md-4 col-md-offset-4">
+			<form role="form" name="userForm">
+				<div class="form-group col-md-12">
+                    <label for="inputTel">手机号</label>
+                    <input type="tel" class="form-control" id="inputTel" placeholder="" ng-model="userInfo.tel" required>
+                </div>
+  				<div class="form-group col-md-12">
+    				<label for="inputPwd">密码</label>
+    				<input type="password" class="form-control" id="inputPwd" placeholder="" ng-model="userInfo.pwd" required>
+  				</div>
+  				<div class="form-group col-md-12">
+    				<label for="surePwd">请再次输入新密码</label>
+    				<input type="password" class="form-control" id="surePwd" placeholder="" ng-model="userInfo.sure_pwd" required>
+  				</div>
+ 				<div class="col-md-12"><button type="submit" class="btn btn-default" ng-click="modify()" ng-disabled="!userForm.$valid">修改</button></div>
+			</form>
+      	</div>
+    </div>
+</div>
+</div></div></div></div>

@@ -7,8 +7,8 @@
 session_start();
 if(!empty($_SESSION)){
 	if($_SESSION['token']){
-		echo "window.token=",$_SESSION['token'],";","window.uid=",$_SESSION['uid'],";";
+		echo "window.token=",$_SESSION['token'],";","window.uid=",$_SESSION['uid'],";","window.tel=",$_SESSION['tel'],";";
 	}
 }else{
-	echo "window.token=0;window.uid=0;";
+	echo "window.token=0;window.uid=0;window.tel='';";
 }

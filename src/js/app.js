@@ -1,7 +1,7 @@
 var app=angular.module("buptBycle",['ui.router']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/home');
+    $urlRouterProvider.otherwise('/rent');
     $stateProvider
         .state("home", {
             url: '/home',
@@ -38,6 +38,31 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         			templateUrl: "template/loginin.html"
         		},
                 'topbar@login':{
+                    templateUrl: "template/topbar.html"
+                }
+        	}
+        })
+        .state('about',{
+        	url:'/about',
+        	views:{
+        		'':{
+        			templateUrl: "template/about.html"
+        		},
+                'topbar@about':{
+                    templateUrl: "template/topbar.html"
+                },
+                'descUs@about':{
+                    templateUrl: "template/descUs.html"
+                }
+        	}
+        })
+        .state('self',{
+        	url:'/self',
+        	views:{
+        		'':{
+        			templateUrl: "template/self.html"
+        		},
+                'topbar@self':{
                     templateUrl: "template/topbar.html"
                 }
         	}

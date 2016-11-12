@@ -1,33 +1,33 @@
 <script>
 $("#topbar").children("li").eq(1).addClass('active');
 $("#topbar").children("li").eq(0).removeClass('active');
+$("#topbar").children("li").eq(2).removeClass('active');
 </script>
 <div style="height:100px;"></div>
 <div class="bycleInfo" ng-controller="bycleinfoCtrl">
 <div class="container">
 <div class="row" style="font-size:20px;border-style:solid none; border-width:2px;border-color:#FFFFFF">
-   <div class="col-md-1"><strong>品牌:</strong></div>	
-   <div class="col-md-1" ng-repeat="x in brandList"><div class="mouseover" ng-click="selectBrand($index)" ng-bind="x"></div>
+   <div class="col-xs-3 col-md-1"><strong>品牌:</strong></div>	
+   <div class="col-xs-3 col-md-1" ng-repeat="x in brandList"><div class="mouseover" ng-click="selectBrand($index)" ng-bind="x"></div>
    </div>
 </div>
 <div class="row" style="font-size:20px; border-bottom-style:solid; border-width:2px;border-color:#FFFFFF">
-   <div class="col-md-1"><strong>样式:</strong></div>	
-   <div class="col-md-1" ng-repeat="y in typeList"><div class="mouseover" ng-click="selectType($index)" ng-bind="y"></div>
+   <div class="col-xs-3 col-md-1"><strong>样式:</strong></div>	
+   <div class="col-xs-3 col-md-1" ng-repeat="y in typeList"><div class="mouseover" ng-click="selectType($index)" ng-bind="y"></div>
    </div>
 </div>
 <div class="row" style="font-size:20px; border-bottom-style:solid;border-width:2px;border-color:#FFFFFF">
-   <div class="col-md-1"><span style="color:blue;font-style:italic;">查找：</span></div>	
-   <div class="col-md-1"><span ng-bind="choices1"></span></div>
-   <div class="col-md-1"><span ng-bind="choices2"></span></div>
+   <div class="col-xs-3 col-md-1"><span style="color:blue;font-style:italic;">查找:</span></div>	
+   <div class="col-xs-3 col-md-1"><span ng-bind="choices1"></span></div>
+   <div class="col-xs-3 col-md-1"><span ng-bind="choices2"></span></div>
 </div>
 
-<div class="row" style="padding:50px">
-   <div class="col-md-4"><div class="mouseover"><img class="img-responsive" src="./src/imgs/by1.jpg" width="300" height="auto"alt=""></div></div>	
-   <div class="col-md-4"><div class="mouseover"><img class="img-responsive" src="./src/imgs/by2.jpg" width="300" height="auto" alt=""></div></div>
-   <div class="col-md-4"><div class="mouseover"><img class="img-responsive" src="./src/imgs/by3.jpg" width="300" height="auto" alt=""></div></div>
+<div class="row" style="padding-top:50px">
+   <div class="col-xs-6 col-md-3" ng-repeat="bycle in bycleList">
+       <div class="col-xs-12 col-md-12"><img class="img-responsive" src="{{bycle.src}}" width="100%" heught="auto" alt="loading...">
+       <div ng-bind="bycle.desc" style="color:black;"></div><div ng-bind="bycle.price" style="color:red;display:inline-block;"></div>
+       <button type="button" class="btn btn-primary btn-xs" style="float:right;" ng-click="rentTo(bycle.id)">我要租</button>
+       </div></div>	
 </div>
  <div style="color:red;float:right"><strong>ps：点击图片了解详情</strong></div>
-
-
-
 </div></div>
