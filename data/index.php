@@ -12,16 +12,16 @@
  **10004:用户手机号登录
  **/
 require_once './config/dataBaseConfig.php';
-include 'classBycle.php';
+require_once 'classBycle.php';
 $data = file_get_contents("php://input",true);
 $data=json_decode($data,true);
 $command=isset($data['cid'])?$data['cid']:0;
 $userId=isset($data['uid'])?$data['uid']:0;
 $token=isset($data['token'])?$data['token']:'';
 if(!$command){
-	$command = $_REQUEST['cid']?$_REQUEST['cid']:0;
-	$userId = $_REQUEST['uid']?$_REQUEST['uid']:0;
-	$token = $_REQUEST['token']?$_REQUEST['token']:'';
+	$command = isset($_REQUEST['cid'])?$_REQUEST['cid']:0;
+	$userId = isset($_REQUEST['uid'])?$_REQUEST['uid']:0;
+	$token = isset($_REQUEST['token'])?$_REQUEST['token']:'';
 }
 $attr = array('userid'=>$userId,'token'=>$token);
 $checkUser = User::checkAndQueryUserInfo($attr);
@@ -31,24 +31,50 @@ switch($command){
 			$bike = new Bycle($userId);
 			echo $bike->signBycle();
 		}else{
-			echo errorInfo(40003);
+			errorInfo(40003);
+			echo false;
 		}
 		break;
 	case 10001:
-		if(!empty($checkUser)){
-			$bike = new Bycle($userId);
-			echo $bike->getBikeList();
+		$bike = new Bycle($userId);
+		$temp = json_decode($bike->getBikeList(),true);
+		$data = array();
+		foreach($temp as $k=>$v){
+			$desc = '';
+			$tags = json_decode($v['tags'],true);
+			for($i=0;$i<count($tags);$i++){
+				$desc .= '  '.$tags[$i];
+			}
+			$data[] = array(
+					'id'=>$v['bikeid'],
+					'src'=>'http:'.json_decode($v['picurl'],true)[0],
+					'desc'=> $desc,
+					'price'=>'￥'.$v['price'],
+			);
+		}
+		$next=isset($data['next'])?$data['next']:0;
+		if(isset($_SESSION['count'])){
+			$_SESSION['count'] = $_SESSION['count']+$next;
 		}else{
-			echo errorInfo(40004);
+			$_SESSION['count'] = 1;
+		}
+		$first=$_SESSION['count']*20-20;
+		$last=($_SESSION['count']*20<count($data))?($_SESSION['count']*20):count($data);
+		if($first>=count($data)){
+			echo false;
+		}else{
+			$data = array_slice($data, $first, $last);
+			echo json_encode($data);
 		}
 		break;
 	case 10002:
-		$bikeId = $_REQUEST['bid']?$_REQUEST['bid']:0;
+		$bikeId = isset($_REQUEST['bid'])?$_REQUEST['bid']:0;
 		if(!empty($checkUser)){
 			$bike = new Bycle($userId);
 			echo $bike->getInfoByBikeId($bikeId);
 		}else{
-			echo errorInfo(40004);
+			errorInfo(40004);
+			echo false;
 		}
 		break;
 	case 10003:
@@ -87,6 +113,7 @@ switch($command){
 		}
 		break;
 	default:
-		echo errorInfo(40000);
+		errorInfo(40000);
+		echo false;
 		break;
 }

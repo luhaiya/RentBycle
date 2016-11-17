@@ -34,7 +34,7 @@ class User{
 			return false;
 		}
 	}
-	public function checkAndQueryUserInfo($attr){
+	public static function checkAndQueryUserInfo($attr){
 		if(!empty($attr['userid'])&&!empty($attr['token'])){
 			$sql = "select * from userinfo where userid='".$attr['userid']."' and token='".$attr['token']."'";
 			$db = new dBoperate('userinfo');
@@ -46,7 +46,7 @@ class User{
 			}
 		}
 	}
-	public function setting($attr){
+	public static function setting($attr){
 		$db = new dBoperate('userinfo');
 		if($attr['tel']&&$attr['pwd']){
 			$db->updateData(array('tel'=>$attr['tel'],'pwd'=>md5($attr['pwd'])),array('userid'=>$attr['userid']));
@@ -55,7 +55,7 @@ class User{
 			return false;
 		}
 	}
-	public function loginin($attr){
+	public static function loginin($attr){
 		if($attr['tel']&&$attr['pwd']){
 			$sql = "select * from userinfo where tel='".$attr['tel']."' and pwd='".$attr['pwd']."'";
 			$db = new dBoperate('userinfo');

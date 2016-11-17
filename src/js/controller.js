@@ -29,18 +29,35 @@ app.controller('topbarCtrl',function($scope){
 app.controller('bycleinfoCtrl',function($scope,$http){
 	$scope.brandList = ['品牌1','品牌2','品牌3'];
 	$scope.typeList = ['样式1','样式2','样式3'];
-	$scope.bycleList = [
-		{id:1,src:'./src/imgs/by1.jpg',desc:'邦德富士达21速自行车山地车禧玛诺铝合金车架双线碟刹26寸悦动S7 S7白蓝',price:'￥699.00'},
-		{id:2,src:'./src/imgs/by2.jpg',desc:'邦德富士达21速自行车山地车禧玛诺铝合金车架双线碟刹26寸悦动S7 S7白蓝',price:'￥699.00'},
-		{id:3,src:'./src/imgs/by3.jpg',desc:'邦德富士达21速自行车山地车禧玛诺铝合金车架双线碟刹26寸悦动S7 S7白蓝',price:'￥699.00'},
-		{id:4,src:'./src/imgs/by3.jpg',desc:'邦德富士达21速自行车山地车禧玛诺铝合金车架双线碟刹26寸悦动S7 S7白蓝',price:'￥699.00'},
-	];
+	$scope.reqbycle = {cid:10001,uid:window.uid,token:window.token,next:0};
+	$http.post('./data/',$scope.reqbycle)
+	.success(function(data){
+		if(data){
+			$scope.bycleList = data;
+		}else{
+			alert("没有车辆信息");
+		}
+	})
+	.error(function(data){alert("没有车辆信息");})
 	$scope.choices = '';
 	$scope.selectBrand = function(index){
 		$scope.choices1 = $scope.brandList[index];
 	}
 	$scope.selectType = function(index){
 		$scope.choices2 = $scope.typeList[index];
+	}
+	$scope.loadmore = function(){
+		$scope.reqbycle = {cid:10001,uid:window.uid,token:window.token,next:1};
+		$http.post('./data/',$scope.reqbycle)
+		.success(function(data){
+			if(data){
+				$scope.bycleList = data;
+			}else{
+				alert("没有更多车辆信息");
+			}
+		})
+		.error(function(data){alert("没有更多车辆信息");})
+		.then(function(data){});
 	}
 	$scope.rentTo = function(id){
 		if(window.uid&&window.token){
@@ -53,7 +70,6 @@ app.controller('bycleinfoCtrl',function($scope,$http){
 			alert("您请先从微信公众号登陆我们！");
 		}
 	}
-	
 });
 app.controller('selfCtrl',function($scope,$http){
 	$scope.modify = function(){

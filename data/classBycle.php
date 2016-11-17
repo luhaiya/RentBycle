@@ -43,7 +43,7 @@ class Bycle{
 		return true;
 	}
 	public function signBycle(){
-		$db = new dBoperate('BycleInfo');
+		$db = new dBoperate('bycleinfo');
 		if(empty($this->attr['picurl'])){
 			return errorInfo(40002);
 		}else{
@@ -60,8 +60,8 @@ class Bycle{
 		}
 	}
 	public function getInfoByBikeId($bycleId){
-		$db = new dBoperate('BycleInfo');
-		$sql = 'select * from BycleInfo where bikeid='.$bycleId;
+		$db = new dBoperate('bycleinfo');
+		$sql = 'select * from bycleinfo where bikeid='.$bycleId;
 		$res = $db->query($sql);
 		if(!empty($res)){
 			return json_encode($res);
@@ -70,8 +70,8 @@ class Bycle{
 		}	
 	}
 	public function getInfoByUserId($uId){
-		$db = new dBoperate('BycleInfo');
-		$sql = 'select * from BycleInfo where userid='.$uId;
+		$db = new dBoperate('bycleinfo');
+		$sql = 'select * from bycleinfo where userid='.$uId;
 		$res = $db->query($sql);
 		if(!empty($res)){
 			return json_encode($res);
@@ -84,8 +84,8 @@ class Bycle{
 	}
 	public function getBikeList(){
 	//TODO:搜索出符合用户需求的自行车
-		$db = new dBoperate('BycleInfo');
-		$sql = 'select * from BycleInfo';
+		$db = new dBoperate('bycleinfo');
+		$sql = 'select * from bycleinfo';
 		$res = $db->query($sql);
 		if(!empty($res)){
 			return json_encode($res);

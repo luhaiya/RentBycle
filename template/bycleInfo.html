@@ -22,12 +22,12 @@ $("#topbar").children("li").eq(2).removeClass('active');
    <div class="col-xs-3 col-md-1"><span ng-bind="choices2"></span></div>
 </div>
 
-<div class="row" style="padding-top:50px">
-   <div class="col-xs-6 col-md-3" ng-repeat="bycle in bycleList">
-       <div class="col-xs-12 col-md-12"><img class="img-responsive" src="{{bycle.src}}" width="100%" heught="auto" alt="loading...">
-       <div ng-bind="bycle.desc" style="color:black;"></div><div ng-bind="bycle.price" style="color:red;display:inline-block;"></div>
+<div class="row" style="padding-top:10px">
+   <div class="col-xs-6 col-md-3" ng-repeat="bycle in bycleList track by bycle.id"><div style="padding-top:20px;">
+       <div><img class="img-responsive" src="{{bycle.src}}" width="100%" heught="auto" alt="loading...">
+       <div ng-bind="bycle.desc" style="color:black;height:100px;overflow: hidden;text-overflow: ellipsis;text-overflow: -o-ellipsis-lastline;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient: vertical;"></div><div ng-bind="bycle.price" style="color:red;display:inline-block;"></div>
        <button type="button" class="btn btn-primary btn-xs" style="float:right;" ng-click="rentTo(bycle.id)">我要租</button>
-       </div></div>	
+       </div></div></div>
 </div>
- <div style="color:red;float:right"><strong>ps：点击图片了解详情</strong></div>
+ <div style="text-align:center;padding-top:40px;"><button type="button" class="btn btn-default btn-block" ng-click="loadmore()">加载更多。。。</button></div>
 </div></div>
