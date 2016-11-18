@@ -13,6 +13,7 @@
  **/
 require_once './config/dataBaseConfig.php';
 require_once 'classBycle.php';
+require_once './weiXin/classWeixin.php';
 $data = file_get_contents("php://input",true);
 $data=json_decode($data,true);
 $command=isset($data['cid'])?$data['cid']:0;
@@ -112,8 +113,23 @@ switch($command){
 			echo false;
 		}
 		break;
-	default:
-		errorInfo(40000);
-		echo false;
+	default://微信授权登录入口
+		session_start();
+		$webauth = new Weixin();
+		$wxuserInfo = $webauth->getWxUserInfo();
+		if($wxuserInfo){
+			$wxuserInfo = json_decode($wxuserInfo, true);
+			$user = new User($userInfo);
+			$userinfo = $user->getUserInfo($wxuserInfo);
+			session_start();
+			$_SESSION['token'] = $userinfo['token'];
+			$_SESSION['uid'] = $userinfo['userid'];
+			$_SESSION['tel'] = $userinfo['tel'];
+			header("Location: http://www.luhaiya.com/RentBycle/#/rent");
+			exit;
+		}else{
+			header("Location: http://www.luhaiya.com/RentBycle/#/rent");
+			exit;
+		}
 		break;
 }

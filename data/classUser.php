@@ -10,19 +10,55 @@ require_once 'commonFunc.php';
 class User{
 	private $attr;
 	public function __construct($attr){
-		$this->attr = array(
-				'wxid'=>$attr['wxid'],
-				'tel'=>'',
-				'pwd'=>'',
-				'type'=>1,
-				'token'=>getRandChar(12),
-		);
-		$db = new dBoperate('userinfo');
-		$userid = $db->insertData($this->attr);
-		if($userid){
-			$this->attr['userid'] = $userid;
+		$table = 'userinfo';
+		$where = 'wxid='.$attr['openid'];
+		$data = $this->isExist($table, $where);
+		if($data){
+			$data = json_decode($data, true);
+			$this->attr = array(
+					'userid'=>$data[0]['userid'],
+					'wxid'=>$data[0]['wxid'],
+					'nickname'=>$data[0]['nickname'],
+					'sex'=>$data[0]['sex'],
+					'headimgurl'=>$data[0]['headimgurl'],
+					'tel'=>$data[0]['tel'],
+					'pwd'=>$data[0]['pwd'],
+					'type'=>$data[0]['type'],
+					'token'=>$data[0]['token'],
+			);//暂时不考虑微信信息更新
 		}else{
-			return errorInfo(40005);
+			$this->attr = array(
+					'wxid'=>$attr['openid'],
+					'nickname'=>$attr['nickname'],
+					'sex'=>$attr['sex'],
+					'headimgurl'=>$attr['headimgurl'],
+					'tel'=>'',
+					'pwd'=>'',
+					'type'=>1,
+					'token'=>getRandChar(12),
+			);
+			$db = new dBoperate('userinfo');
+			$db->insertData($this->attr);
+			$table = 'userinfo';
+			$where = 'wxid='.$attr['openid'];
+			$data = $this->isExist($table, $where);
+			if($data){
+				$data = json_decode($data, true);
+				$this->attr['userid'] = $data[0]['userid'];
+			}
+		}
+	}
+	public function getUserInfo(){
+		return json_encode($this->attr);
+	}
+	public function isExist($table, $where){
+		$db = new dBoperate('userinfo');
+		$sql = "select * from $table where $where";
+		$res = $db->query($sql);
+		if(!empty($res)){
+			return json_encode($res);
+		}else{
+			return false;
 		}
 	}
 	public function upgrade($attr){

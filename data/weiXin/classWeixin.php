@@ -81,8 +81,8 @@ class Weixin{
 				break;
 			case 'click':
 				switch($postObj->EventKey){
-					case 'signIn':
-						$data = array('text'=>'这是注册事件');
+					case 'about':
+						$data = array('text'=>'about us');
 						echo $this->createXml('text',$data);
 						break;
 					case 'talk':
@@ -128,5 +128,44 @@ class Weixin{
 		}
 		$header .='</xml>';
 		return $header;
+	}
+	public function getWxUserInfo(){
+		if($_SESSION['access_authtoken'] && $_SESSION['expire_authtime']>time()){
+			$flag = 1;
+		}else{
+			$flag = 0;
+			$state = isset($_REQUEST['state'])?$_REQUEST['state']:'';
+			$code = isset($_REQUEST['code'])?$_REQUEST['code']:'';
+			$url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$this->appId.'&secret='.$this->appSecret.'&code='.$code.'&grant_type=authorization_code';
+			$res = httpCurl($url, 'get', 'json');
+			$res = json_decode($res, true);
+			if(isset($res['errcode'])){
+				//TODO:无法获得授权
+				$flag = 0;
+			}else{
+				$access_authtoken = $res['access_token'];
+				$refresh_token = $res['refresh_token'];
+				$openid = $res['openid'];
+				$unionid = isset($res['unionid'])?$res['unionid']:'';
+				session_start();
+				$_SESSION['access_authtoken'] = $access_authtoken;
+				$_SESSION['refresh_token'] = $refresh_token;
+				$_SESSION['expire_authtime'] = time()+7000;
+				$_SESSION['openid'] = $openid;
+				$flag = 1;
+			}
+		}
+		if($flag){
+			$url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$_SESSION['access_authtoken'].'&openid='.$_SESSION['openid'].'&lang=zh_CN';
+			$res = httpCurl($url, 'get', 'json');
+			$res = json_decode($res, true);
+			if(isset($res['errcode'])){
+				return false;
+			}else{
+				return json_encode($res);
+			}
+		}else{
+			return false;
+		}
 	}
 }
