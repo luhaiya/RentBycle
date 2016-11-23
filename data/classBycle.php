@@ -27,7 +27,8 @@ class Bycle{
 			$this->attr['picurl'][] = $filename;
 			return true;
 		}else{
-			return errorInfo(40001);
+			errorInfo(40001);
+			return false;
 		}
 	}
 	public function addTags($string){
@@ -45,7 +46,8 @@ class Bycle{
 	public function signBycle(){
 		$db = new dBoperate('bycleinfo');
 		if(empty($this->attr['picurl'])){
-			return errorInfo(40002);
+			errorInfo(40002);
+			return false;
 		}else{
 			$this->saveImgFromPost();
 			$this->attr['picurl'] = json_encode($this->attr['picurl']);
@@ -55,18 +57,20 @@ class Bycle{
 				User::upgrade($this->attr);
 				return $bycleId;
 			}else{
-				return errorInfo(40003);
+				errorInfo(40003);
+				return false;
 			}
 		}
 	}
-	public function getInfoByBikeId($bycleId){
+	public static function getInfoByBikeId($bycleId){
 		$db = new dBoperate('bycleinfo');
 		$sql = 'select * from bycleinfo where bikeid='.$bycleId;
 		$res = $db->query($sql);
 		if(!empty($res)){
 			return json_encode($res);
 		}else{
-			return errorInfo(40004);
+			errorInfo(40004);
+			return false;
 		}	
 	}
 	public function getInfoByUserId($uId){
@@ -76,7 +80,8 @@ class Bycle{
 		if(!empty($res)){
 			return json_encode($res);
 		}else{
-			return errorInfo(40004);
+			errorInfo(40004);
+			return false;
 		}
 	}
 	public function updateBycleInfo($bycleId){
@@ -90,7 +95,8 @@ class Bycle{
 		if(!empty($res)){
 			return json_encode($res);
 		}else{
-			return errorInfo(40004);
+			errorInfo(40004);
+			return false;
 		}
 	}
 }

@@ -5,8 +5,7 @@
  **功能：微信类
  **
  **/
-require_once('../config/wxConfig.php');
-require_once('../commonFunc.php');
+
 class Weixin{
 	private $fromUsername;
 	private $toUsername;
@@ -138,7 +137,6 @@ class Weixin{
 			$code = isset($_REQUEST['code'])?$_REQUEST['code']:'';
 			$url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$this->appId.'&secret='.$this->appSecret.'&code='.$code.'&grant_type=authorization_code';
 			$res = httpCurl($url, 'get', 'json');
-			$res = json_decode($res, true);
 			if(isset($res['errcode'])){
 				//TODO:无法获得授权
 				$flag = 0;
@@ -158,7 +156,6 @@ class Weixin{
 		if($flag){
 			$url = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$_SESSION['access_authtoken'].'&openid='.$_SESSION['openid'].'&lang=zh_CN';
 			$res = httpCurl($url, 'get', 'json');
-			$res = json_decode($res, true);
 			if(isset($res['errcode'])){
 				return false;
 			}else{
@@ -167,5 +164,22 @@ class Weixin{
 		}else{
 			return false;
 		}
+	}
+	public function rentToUser($attr){
+		$data = array(
+				"touser"=>$attr['wxid'],
+				"template_id"=>tpid,
+				"url"=>"http://www.luhaiya.com/RentBycle/#/rent",
+				"topcolor"=>"#FF0000",
+				"data"=>array(
+						"tel"=>array("value"=>$attr['tel'],"color"=>"#173177"),
+						"last"=>array("value"=>"欢迎使用！","color"=>"#173177"),
+				),
+		);
+		$data = json_encode($data);
+		$accessToken = $this->getWxAccessToken();
+		$itemUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$accessToken;
+		httpCurl($itemUrl, 'post', 'json', $data);
+		return true;
 	}
 }

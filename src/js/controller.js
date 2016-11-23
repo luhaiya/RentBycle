@@ -18,12 +18,12 @@ app.controller('logininCtrl',function($scope,$http){
 	}
 });
 app.controller('topbarCtrl',function($scope){
-	if(window.uid==0||window.token==''){
-		$scope.href = '#/login';
-		$scope.userLogin = '登陆';
-	}else{
+	if(window.uid&&window.token){
 		$scope.href = '#/self';
 		$scope.userLogin = '个人中心';
+	}else{
+		$scope.href = '#/login';
+		$scope.userLogin = '登陆';
 	}
 });
 app.controller('bycleinfoCtrl',function($scope,$http){
@@ -62,9 +62,19 @@ app.controller('bycleinfoCtrl',function($scope,$http){
 	$scope.rentTo = function(id){
 		if(window.uid&&window.token){
 			if(window.tel){
-				alert('已经给车主发送请求了，请等待回电');
+				$scope.request = {cid:10006,bycleid:id,uid:window.uid,token:window.token,tel:window.tel};
+				$http.post('./data/',$scope.request)
+				.success(function(data){
+					if(data){
+						alert("已经向车主发起请求，请等待！！！");
+					}else{
+						alert("请求失败");
+					}
+				})
+				.error(function(data){alert("没有更多车辆信息");})
 			}else{
 				alert('请您先到个人中心填写一下手机号');
+				window.location="#/self";
 			}
 		}else{
 			alert("您请先从微信公众号登陆我们！");
@@ -72,6 +82,8 @@ app.controller('bycleinfoCtrl',function($scope,$http){
 	}
 });
 app.controller('selfCtrl',function($scope,$http){
+	$scope.usertype = '车主';
+	$scope.tel = window.tel;
 	$scope.modify = function(){
 		if(window.uid){
 			if($scope.userInfo.pwd==$scope.userInfo.sure_pwd){
@@ -80,7 +92,7 @@ app.controller('selfCtrl',function($scope,$http){
 				$scope.userInfo.token = window.token;
 				$http.post('./data/',$scope.userInfo)
 				.success(function(data){
-					if(data){alert("设置成功");}else{alert("设置失败");}
+					if(data){alert("设置成功,请重新登录");window.location="#/login";}else{alert("设置失败");}
 				})
 				.error(function(data){alert("设置失败");})
 			}else{

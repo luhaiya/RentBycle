@@ -11,7 +11,7 @@ class User{
 	private $attr;
 	public function __construct($attr){
 		$table = 'userinfo';
-		$where = 'wxid='.$attr['openid'];
+		$where = 'wxid="'.$attr['openid'].'"';
 		$data = $this->isExist($table, $where);
 		if($data){
 			$data = json_decode($data, true);
@@ -40,7 +40,7 @@ class User{
 			$db = new dBoperate('userinfo');
 			$db->insertData($this->attr);
 			$table = 'userinfo';
-			$where = 'wxid='.$attr['openid'];
+			$where = 'wxid="'.$attr['openid'].'"';
 			$data = $this->isExist($table, $where);
 			if($data){
 				$data = json_decode($data, true);
@@ -85,7 +85,7 @@ class User{
 	public static function setting($attr){
 		$db = new dBoperate('userinfo');
 		if($attr['tel']&&$attr['pwd']){
-			$db->updateData(array('tel'=>$attr['tel'],'pwd'=>md5($attr['pwd'])),array('userid'=>$attr['userid']));
+			$db->updateData(array('tel'=>$attr['tel'],'pwd'=>$attr['pwd']),array('userid'=>$attr['userid']));
 			return true;
 		}else{
 			return false;
@@ -101,6 +101,17 @@ class User{
 			}else{
 				return false;
 			}
+		}
+	}
+	public static function getUserInfoById($id){
+		$db = new dBoperate('userinfo');
+		$sql = 'select * from userinfo where userid='.$id;
+		$res = $db->query($sql);
+		if(!empty($res)){
+			return json_encode($res);
+		}else{
+			errorInfo(40006);
+			return false;
 		}
 	}
 }

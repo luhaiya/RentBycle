@@ -10,10 +10,14 @@
  **10002：获取自行车的详细信息
  **10003：获取用户的详细信息（加密）
  **10004:用户手机号登录
+ **10005:重设手机号密码
+ **10006:向车主发起请求
  **/
 require_once './config/dataBaseConfig.php';
 require_once 'classBycle.php';
 require_once './weiXin/classWeixin.php';
+require_once('./config/wxConfig.php');
+require_once('./commonFunc.php');
 $data = file_get_contents("php://input",true);
 $data=json_decode($data,true);
 $command=isset($data['cid'])?$data['cid']:0;
@@ -113,14 +117,35 @@ switch($command){
 			echo false;
 		}
 		break;
+	case 10006:
+		$bycleid = $data['bycleid'];
+		$tel = $data['tel'];
+		if(!empty($checkUser)){
+			$res = Bycle::getInfoByBikeId($bycleid);
+			if($res){
+				$res = json_decode($res,true);
+				$user = User::getUserInfoById($res[0]['userid']);
+				$user = json_decode($user,true);
+				$attr = array('wxid'=>$user[0]['wxid'],'tel'=>$tel);
+				$wxOperator = new Weixin();
+				$wxOperator->rentToUser($attr);
+				echo true;
+			}else{
+				echo false;
+			}
+		}else{
+			echo false;
+		}
+		break;
 	default://微信授权登录入口
 		session_start();
 		$webauth = new Weixin();
 		$wxuserInfo = $webauth->getWxUserInfo();
 		if($wxuserInfo){
 			$wxuserInfo = json_decode($wxuserInfo, true);
-			$user = new User($userInfo);
+			$user = new User($wxuserInfo);
 			$userinfo = $user->getUserInfo($wxuserInfo);
+			$userinfo = json_decode($userinfo,true);
 			session_start();
 			$_SESSION['token'] = $userinfo['token'];
 			$_SESSION['uid'] = $userinfo['userid'];
