@@ -34,7 +34,14 @@ switch($command){
 	case 10000:
 		if(!empty($checkUser)){
 			$bike = new Bycle($userId);
-			echo $bike->signBycle();
+			$tags=isset($data['tags'])?$data['tags']:'';
+			$price=isset($data['price'])?$data['price']:'';
+			if(!$tags||!$price){
+				$tags = isset($_REQUEST['tags'])?$_REQUEST['tags']:'';
+				$price = isset($_REQUEST['price'])?$_REQUEST['price']:'';
+			}
+			$attr = array("tags"=>$tags,"price"=>$price);
+			echo $bike->signBycle($attr);
 		}else{
 			errorInfo(40003);
 			echo false;

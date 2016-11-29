@@ -14,7 +14,25 @@
     <h3><strong>车辆信息</strong></h3>
     </div>
     <div class="row">
-    </div>
+    	<div class="col-md-4 col-md-offset-4">
+    	<form role="form">
+    		<div class="form-group col-md-12">
+			    <input id="byclepic" type="file" file-model="mypic" accept='image/*' style="display:none" required> 
+				<div class="input-append"> 
+				<img id="photoCover" alt="预览图片" class="img-responsive" width="100%" heught="auto"/>
+				<button class="btn btn-default" type="button" onclick="$('input[id=byclepic]').click();">上传图片</button> 
+			</div></div>
+			<div class="form-group col-md-12">
+				<label for="descBycle">描述：</label>
+                <input type="text" class="form-control" ng-model="mydesc" id="descBycle" placeholder="" required>
+			</div>
+			<div class="form-group col-md-12">
+				<label for="priceBycle">价格（RMB/天）：</label>
+                <input type="text" class="form-control" ng-model="myprice" id="priceBycle" placeholder="" required>
+			</div>
+			<div class="col-md-12"><button type="submit" class="btn btn-default" ng-click="grade()">提交</button></div>
+		</form>
+    </div></div>
 	<hr style="border:solid white 2px;"></hr> 
 	<div class="row">
     <h3><strong>设置手机号码及密码</strong></h3>
@@ -40,3 +58,17 @@
     </div>
 </div>
 </div></div></div></div>
+<script>
+$('input[id=byclepic]').change(function() { 
+	setImagePreview();
+});
+function setImagePreview(){
+    var doc="byclepic";
+    var preview="photoCover";
+    var docObj=document.getElementById(doc);
+    var imgObjPreview=document.getElementById(preview);
+    if(docObj.files &&docObj.files[0]){
+        imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+    }
+}
+</script>

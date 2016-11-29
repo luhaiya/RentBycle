@@ -6,22 +6,16 @@ $("#topbar").children("li").eq(2).removeClass('active');
 <div style="height:100px;"></div>
 <div class="bycleInfo" ng-controller="bycleinfoCtrl">
 <div class="container">
-<div class="row" style="font-size:20px;border-style:solid none; border-width:2px;border-color:#FFFFFF">
-   <div class="col-xs-3 col-md-1"><strong>品牌:</strong></div>	
-   <div class="col-xs-3 col-md-1" ng-repeat="x in brandList"><div class="mouseover" ng-click="selectBrand($index)" ng-bind="x"></div>
-   </div>
+<div class="row">
+<div class="col-lg-6">
+    <div class="input-group">
+      <input type="text" class="form-control">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">搜索</button>
+      </span>
+    </div>
 </div>
-<div class="row" style="font-size:20px; border-bottom-style:solid; border-width:2px;border-color:#FFFFFF">
-   <div class="col-xs-3 col-md-1"><strong>样式:</strong></div>	
-   <div class="col-xs-3 col-md-1" ng-repeat="y in typeList"><div class="mouseover" ng-click="selectType($index)" ng-bind="y"></div>
-   </div>
 </div>
-<div class="row" style="font-size:20px; border-bottom-style:solid;border-width:2px;border-color:#FFFFFF">
-   <div class="col-xs-3 col-md-1"><span style="color:blue;font-style:italic;">查找:</span></div>	
-   <div class="col-xs-3 col-md-1"><span ng-bind="choices1"></span></div>
-   <div class="col-xs-3 col-md-1"><span ng-bind="choices2"></span></div>
-</div>
-
 <div class="row" style="padding-top:10px">
    <div class="col-xs-6 col-md-3" ng-repeat="bycle in bycleList track by bycle.id"><div style="padding-top:20px;">
        <div><img class="img-responsive" src="{{bycle.src}}" width="100%" heught="auto" alt="loading...">

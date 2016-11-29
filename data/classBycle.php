@@ -20,47 +20,18 @@ class Bycle{
 				'state'=>1,
 		);
 	}
-	public function saveImgFromPost(){
-		if($_FILE["img"]["name"]){
-			$filename = "../src/imgs/User/" . createStringByTime() . 'jpg';
-			move_uploaded_file($_FILES["img"]["tmp_name"],$filename);
-			$this->attr['picurl'][] = $filename;
-			return true;
-		}else{
-			errorInfo(40001);
-			return false;
-		}
-	}
-	public function addTags($string){
-		$this->attr['tags'][] = $string;
-		return true;
-	}
-	public function addBrand($string){
-		$this->attr['brand'] = $string;
-		return true;
-	}
-	public function addPrice($string){
-		$this->attr['price'] = $string;
-		return true;
-	}
-	public function signBycle(){
+	public function signBycle($para){
 		$db = new dBoperate('bycleinfo');
-		if(empty($this->attr['picurl'])){
-			errorInfo(40002);
-			return false;
-		}else{
-			$this->saveImgFromPost();
-			$this->attr['picurl'] = json_encode($this->attr['picurl']);
-			$this->attr['tags'] = json_encode($this->attr['tags']);
-			$bycleId = $db->insertData($this->attr);
-			if($bycleId){
-				User::upgrade($this->attr);
-				return $bycleId;
-			}else{
-				errorInfo(40003);
-				return false;
-			}
-		}
+		$this->attr['tags'][] = $para['tags'];
+		$this->attr['price'] = $para['price'];
+		$file = "../src/imgs/User/" . createStringByTime() . 'jpg';
+		file_put_contents($file,$para['img']);
+		$this->attr['picurl'][] = $file;
+		$this->attr['picurl'] = json_encode($this->attr['picurl']);
+		$this->attr['tags'] = json_encode($this->attr['tags']);
+		$db->insertData($this->attr);
+		User::upgrade($this->attr);
+		return true;
 	}
 	public static function getInfoByBikeId($bycleId){
 		$db = new dBoperate('bycleinfo');

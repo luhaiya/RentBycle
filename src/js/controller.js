@@ -27,8 +27,6 @@ app.controller('topbarCtrl',function($scope){
 	}
 });
 app.controller('bycleinfoCtrl',function($scope,$http){
-	$scope.brandList = ['品牌1','品牌2','品牌3'];
-	$scope.typeList = ['样式1','样式2','样式3'];
 	$scope.reqbycle = {cid:10001,uid:window.uid,token:window.token,next:0};
 	$http.post('./data/',$scope.reqbycle)
 	.success(function(data){
@@ -39,13 +37,6 @@ app.controller('bycleinfoCtrl',function($scope,$http){
 		}
 	})
 	.error(function(data){alert("没有车辆信息");})
-	$scope.choices = '';
-	$scope.selectBrand = function(index){
-		$scope.choices1 = $scope.brandList[index];
-	}
-	$scope.selectType = function(index){
-		$scope.choices2 = $scope.typeList[index];
-	}
 	$scope.loadmore = function(){
 		$scope.reqbycle = {cid:10001,uid:window.uid,token:window.token,next:1};
 		$http.post('./data/',$scope.reqbycle)
@@ -100,6 +91,30 @@ app.controller('selfCtrl',function($scope,$http){
 			}
 		}else{
 			alert("请您重新登录一下！");
+		}
+	}
+	$scope.grade = function(){
+		if(window.uid&&window.token){
+			var fd = new FormData();
+			fd.append('img', $scope.mypic);
+			fd.append('cid', 10000);
+			fd.append('uid', window.uid);
+			fd.append('token', window.token);
+			fd.append('tags', $scope.mydesc);
+			fd.append('price', $scope.myprice);
+			$http({
+				method:"post",
+				url:"./data/",
+				data:fd,
+				headers: {'Content-Type':undefined},
+				transformRequest: angular.identity
+			})
+			.success(function(data){
+				if(data){alert("提交成功！");window.location.reload();}else{alert("提交失败1");}
+			})
+			.error(function(data){alert("提交失败2");})
+		}else{
+			alert("请从微信公众号登录");
 		}
 	}
 });
