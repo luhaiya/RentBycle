@@ -1,0 +1,17 @@
+<script>
+$("#selfbar").children("li").eq(0).addClass('active');
+$("#selfbar").children("li").eq(1).removeClass('active');
+$("#selfbar").children("li").eq(2).removeClass('active');
+</script>
+<div class="row" ng-controller="selfinfoCtrl">	
+<div class="col-md-12" style="margin-bottom:50px;text-align:center;">
+    <div class="row">
+    <hr style="border:solid white 2px;"></hr> 
+		<h3><strong>您的账户信息 </strong></h3>
+	</div>
+	<div class="row">
+		<div class="col-md-12">用户类型：{{usertype}}</div>
+		<div class="col-md-12">联系方式：{{tel}}</div>
+	</div>
+</div>
+</div>

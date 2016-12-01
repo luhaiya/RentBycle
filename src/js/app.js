@@ -1,4 +1,4 @@
-var app=angular.module("buptBycle",['ui.router']);
+var app=angular.module("buptBycle",['ui.router','infinite-scroll']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/rent');
@@ -66,5 +66,17 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     templateUrl: "template/topbar.html"
                 }
         	}
+        })
+        .state('self.selfinfo',{
+        	url:'/selfinfo',
+        	templateUrl:"template/selfinfo.html"
+        })
+        .state('self.setbycleinfo',{
+        	url:'/setbycleinfo',
+        	templateUrl:"template/setbycleinfo.html"
+        })
+        .state('self.setting',{
+        	url:'/setting',
+        	templateUrl:"template/setting.html"
         })
 });

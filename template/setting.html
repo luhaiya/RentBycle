@@ -1,0 +1,31 @@
+<script>
+$("#selfbar").children("li").eq(2).addClass('active');
+$("#selfbar").children("li").eq(1).removeClass('active');
+$("#selfbar").children("li").eq(0).removeClass('active');
+</script>
+<hr style="border:solid white 2px;"></hr> 
+	<div class="row">
+	<div class="col-md-12" style="margin-bottom:50px;text-align:center;">
+	<h3><strong>设置手机号码及密码</strong></h3>
+	<div class="row" ng-controller="settingCtrl">
+       	<div class="col-md-4 col-md-offset-4">
+			<form role="form" name="userForm">
+				<div class="form-group col-md-12">
+                    <label for="inputTel">手机号</label>
+                    <input type="tel" class="form-control" id="inputTel" placeholder="" ng-model="userInfo.tel" required>
+                </div>
+  				<div class="form-group col-md-12">
+    				<label for="inputPwd">密码</label>
+    				<input type="password" class="form-control" id="inputPwd" placeholder="" ng-model="userInfo.pwd" required>
+  				</div>
+  				<div class="form-group col-md-12">
+    				<label for="surePwd">请再次输入新密码</label>
+    				<input type="password" class="form-control" id="surePwd" placeholder="" ng-model="userInfo.sure_pwd" required>
+  				</div>
+ 				<div class="col-md-12"><button type="submit" class="btn btn-default" ng-click="modify()" ng-disabled="!userForm.$valid">修改</button></div>
+			</form>
+      	</div>
+    </div>
+	</div>
+    </div>
+	

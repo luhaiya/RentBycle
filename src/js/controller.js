@@ -26,30 +26,8 @@ app.controller('topbarCtrl',function($scope){
 		$scope.userLogin = '登陆';
 	}
 });
-app.controller('bycleinfoCtrl',function($scope,$http){
-	$scope.reqbycle = {cid:10001,uid:window.uid,token:window.token,next:0};
-	$http.post('./data/',$scope.reqbycle)
-	.success(function(data){
-		if(data){
-			$scope.bycleList = data;
-		}else{
-			alert("没有车辆信息");
-		}
-	})
-	.error(function(data){alert("没有车辆信息");})
-	$scope.loadmore = function(){
-		$scope.reqbycle = {cid:10001,uid:window.uid,token:window.token,next:1};
-		$http.post('./data/',$scope.reqbycle)
-		.success(function(data){
-			if(data){
-				$scope.bycleList = data;
-			}else{
-				alert("没有更多车辆信息");
-			}
-		})
-		.error(function(data){alert("没有更多车辆信息");})
-		.then(function(data){});
-	}
+app.controller('bycleinfoCtrl',function($scope,$http,bycles){
+	$scope.bycles = new bycles();
 	$scope.rentTo = function(id){
 		if(window.uid&&window.token){
 			if(window.tel){
@@ -72,27 +50,11 @@ app.controller('bycleinfoCtrl',function($scope,$http){
 		}
 	}
 });
-app.controller('selfCtrl',function($scope,$http){
+app.controller('selfinfoCtrl',function($scope){
 	$scope.usertype = '车主';
 	$scope.tel = window.tel;
-	$scope.modify = function(){
-		if(window.uid){
-			if($scope.userInfo.pwd==$scope.userInfo.sure_pwd){
-				$scope.userInfo.cid = 10005;
-				$scope.userInfo.uid = window.uid;
-				$scope.userInfo.token = window.token;
-				$http.post('./data/',$scope.userInfo)
-				.success(function(data){
-					if(data){alert("设置成功,请重新登录");window.location="#/login";}else{alert("设置失败");}
-				})
-				.error(function(data){alert("设置失败");})
-			}else{
-				alert("密码两次不匹配");
-			}
-		}else{
-			alert("请您重新登录一下！");
-		}
-	}
+});
+app.controller('selfbycleinfoCtrl',function($scope,$http){
 	$scope.grade = function(){
 		if(window.uid&&window.token){
 			var fd = new FormData();
@@ -115,6 +77,26 @@ app.controller('selfCtrl',function($scope,$http){
 			.error(function(data){alert("提交失败2");})
 		}else{
 			alert("请从微信公众号登录");
+		}
+	}
+});
+app.controller('settingCtrl',function($scope,$http){
+	$scope.modify = function(){
+		if(window.uid){
+			if($scope.userInfo.pwd==$scope.userInfo.sure_pwd){
+				$scope.userInfo.cid = 10005;
+				$scope.userInfo.uid = window.uid;
+				$scope.userInfo.token = window.token;
+				$http.post('./data/',$scope.userInfo)
+				.success(function(data){
+					if(data){alert("设置成功,请重新登录");window.location="#/login";}else{alert("设置失败");}
+				})
+				.error(function(data){alert("设置失败");})
+			}else{
+				alert("密码两次不匹配");
+			}
+		}else{
+			alert("请您重新登录一下！");
 		}
 	}
 });

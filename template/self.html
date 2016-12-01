@@ -1,74 +1,14 @@
 <div ui-view="topbar"></div>
-<div class="loginin" ng-controller="selfCtrl"><div class="container">
-<div class="row">	
-<div class="col-md-12" style="margin-bottom:50px;text-align:center;">
-    <div class="row">
-		<h3><strong>您的账户信息 </strong></h3>
+<div style="height:60px;"></div>
+<div class="container">
+<div class="row">
+	<div class="col-md-12">
+		<ul class="nav nav-pills" role="tablist" id="selfbar">
+		  <li role="presentation"><a ui-sref="self.selfinfo">个人信息</a></li>
+		  <li role="presentation"><a ui-sref="self.setbycleinfo">新增车辆</a></li>
+		  <li role="presentation"><a ui-sref="self.setting">设置手机密码</a></li>
+		</ul>
 	</div>
-	<div class="row">
-		<div class="col-md-12">用户类型：{{usertype}}</div>
-		<div class="col-md-12">联系方式：{{tel}}</div>
-	</div>
-	<hr style="border:solid white 2px;"></hr> 
-	<div class="row">
-    <h3><strong>车辆信息</strong></h3>
-    </div>
-    <div class="row">
-    	<div class="col-md-4 col-md-offset-4">
-    	<form role="form">
-    		<div class="form-group col-md-12">
-			    <input id="byclepic" type="file" file-model="mypic" accept='image/*' style="display:none" required> 
-				<div class="input-append"> 
-				<img id="photoCover" alt="预览图片" class="img-responsive" width="100%" heught="auto"/>
-				<button class="btn btn-default" type="button" onclick="$('input[id=byclepic]').click();">上传图片</button> 
-			</div></div>
-			<div class="form-group col-md-12">
-				<label for="descBycle">描述：</label>
-                <input type="text" class="form-control" ng-model="mydesc" id="descBycle" placeholder="" required>
-			</div>
-			<div class="form-group col-md-12">
-				<label for="priceBycle">价格（RMB/天）：</label>
-                <input type="text" class="form-control" ng-model="myprice" id="priceBycle" placeholder="" required>
-			</div>
-			<div class="col-md-12"><button type="submit" class="btn btn-default" ng-click="grade()">提交</button></div>
-		</form>
-    </div></div>
-	<hr style="border:solid white 2px;"></hr> 
-	<div class="row">
-    <h3><strong>设置手机号码及密码</strong></h3>
-    </div>
-	<div class="row">
-       	<div class="col-md-4 col-md-offset-4">
-			<form role="form" name="userForm">
-				<div class="form-group col-md-12">
-                    <label for="inputTel">手机号</label>
-                    <input type="tel" class="form-control" id="inputTel" placeholder="" ng-model="userInfo.tel" required>
-                </div>
-  				<div class="form-group col-md-12">
-    				<label for="inputPwd">密码</label>
-    				<input type="password" class="form-control" id="inputPwd" placeholder="" ng-model="userInfo.pwd" required>
-  				</div>
-  				<div class="form-group col-md-12">
-    				<label for="surePwd">请再次输入新密码</label>
-    				<input type="password" class="form-control" id="surePwd" placeholder="" ng-model="userInfo.sure_pwd" required>
-  				</div>
- 				<div class="col-md-12"><button type="submit" class="btn btn-default" ng-click="modify()" ng-disabled="!userForm.$valid">修改</button></div>
-			</form>
-      	</div>
-    </div>
 </div>
-</div></div></div></div>
-<script>
-$('input[id=byclepic]').change(function() { 
-	setImagePreview();
-});
-function setImagePreview(){
-    var doc="byclepic";
-    var preview="photoCover";
-    var docObj=document.getElementById(doc);
-    var imgObjPreview=document.getElementById(preview);
-    if(docObj.files &&docObj.files[0]){
-        imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
-    }
-}
-</script>
+<div ui-view></div>
+</div>

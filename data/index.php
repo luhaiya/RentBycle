@@ -64,18 +64,16 @@ switch($command){
 					'price'=>'￥'.$v['price'],
 			);
 		}
-		$next=isset($data['next'])?$data['next']:0;
-		if(isset($_SESSION['count'])){
-			$_SESSION['count'] = $_SESSION['count']+$next;
-		}else{
-			$_SESSION['count'] = 1;
+		$page = isset($data['page'])?$data['page']:0;
+		if(!$page){
+			$page = isset($_REQUEST['page'])?$_REQUEST['page']:0;
 		}
-		$first=$_SESSION['count']*20-20;
-		$last=($_SESSION['count']*20<count($data))?($_SESSION['count']*20):count($data);
+		$first=$page*4;
+		$last=$page*4+4;
 		if($first>=count($data)){
 			echo false;
 		}else{
-			$data = array_slice($data, $first, $last);
+			$data = array_slice($data, 0, $last);
 			echo json_encode($data);
 		}
 		break;
