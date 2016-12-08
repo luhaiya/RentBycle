@@ -12,6 +12,8 @@
  **10004:用户手机号登录
  **10005:重设手机号密码
  **10006:向车主发起请求
+ **10007:车主修改自行车的状态
+ **10008:选出车主发布过的车
  **/
 require_once './config/dataBaseConfig.php';
 require_once 'classBycle.php';
@@ -50,6 +52,10 @@ switch($command){
 	case 10001:
 		$bike = new Bycle($userId);
 		$temp = json_decode($bike->getBikeList(),true);
+		$keyword = isset($data['keyword'])?$data['keyword']:'';
+		if(!$keyword){
+			$keyword = isset($_REQUEST['keyword'])?$_REQUEST['keyword']:'';
+		}
 		$data = array();
 		foreach($temp as $k=>$v){
 			$desc = '';
@@ -68,14 +74,9 @@ switch($command){
 		if(!$page){
 			$page = isset($_REQUEST['page'])?$_REQUEST['page']:0;
 		}
-		$first=$page*4;
 		$last=$page*4+4;
-		if($first>=count($data)){
-			echo false;
-		}else{
-			$data = array_slice($data, 0, $last);
-			echo json_encode($data);
-		}
+		$data = array_slice($data, 0, $last);
+		echo json_encode($data);
 		break;
 	case 10002:
 		$bikeId = isset($_REQUEST['bid'])?$_REQUEST['bid']:0;
@@ -138,6 +139,86 @@ switch($command){
 			}else{
 				echo false;
 			}
+		}else{
+			echo false;
+		}
+		break;
+	case 10007:
+		if(!empty($checkUser)){
+			$bycleid = isset($data['bycleid'])?$data['bycleid']:0;
+			if(!$bycleid){
+				$bycleid = isset($_REQUEST['bycleid'])?$_REQUEST['bycleid']:0;
+			}
+			Bycle::changeBycleState($bycleid);
+			$temp = json_decode(Bycle::getInfoByUserId($userId),true);
+			$state = array('未租出','已租出');
+			$data = array();
+			foreach($temp as $k=>$v){
+				$desc = '';
+				$tags = json_decode($v['tags'],true);
+				for($i=0;$i<count($tags);$i++){
+					$desc .= '  '.$tags[$i];
+				}
+				$data[] = array(
+						'id'=>$v['bikeid'],
+						'src'=>'http:'.json_decode($v['picurl'],true)[0],
+						'desc'=> $desc,
+						'price'=>'￥'.$v['price'],
+						'state'=> $state[$v['state']],
+				);
+			}
+			session_start();
+			$page = isset($_SESSION['page'])?$_SESSION['page']:0;
+			$first=$page*4;
+			$data = array_slice($data, $first, 4);
+			echo json_encode($data);
+		}else{
+			echo false;
+		}
+		break;
+	case 10008:
+		if(!empty($checkUser)){
+			$temp = json_decode(Bycle::getInfoByUserId($userId),true);
+			$state = array('未租出','已租出');
+			$data = array();
+			foreach($temp as $k=>$v){
+				$desc = '';
+				$tags = json_decode($v['tags'],true);
+				for($i=0;$i<count($tags);$i++){
+					$desc .= '  '.$tags[$i];
+				}
+				$data[] = array(
+						'id'=>$v['bikeid'],
+						'src'=>'http:'.json_decode($v['picurl'],true)[0],
+						'desc'=> $desc,
+						'price'=>'￥'.$v['price'],
+						'state'=> $state[$v['state']],
+				);
+			}
+			$maxPage = ceil(count($data)/4)-1;
+			session_start();
+			$page = isset($_SESSION['page'])?$_SESSION['page']:0;
+			$type = isset($data['type'])?$data['type']:0;
+			if(!$type){
+				$type = isset($_REQUEST['type'])?$_REQUEST['type']:0;
+			}
+			if($type == 0){
+				$page = 0;
+			}
+			if($type == 2){
+				if($page<$maxPage){
+					$page += 1;
+				}
+			}
+			if($type == 1){
+				if($page){
+					$page -= 1;
+				}
+			}
+			$_SESSION['page'] = $page;
+			$first=$page*4;
+			$data = array_slice($data, $first, 4);
+			echo json_encode($data);
 		}else{
 			echo false;
 		}

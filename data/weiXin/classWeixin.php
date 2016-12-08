@@ -169,7 +169,7 @@ class Weixin{
 		$data = array(
 				"touser"=>$attr['wxid'],
 				"template_id"=>tpid,
-				"url"=>"http://www.luhaiya.com/RentBycle/#/rent",
+				"url"=>"http://www.luhaiya.com/RentBycle/#/self/selfbycleinfo",
 				"topcolor"=>"#FF0000",
 				"data"=>array(
 						"tel"=>array("value"=>$attr['tel'],"color"=>"#173177"),

@@ -19,7 +19,7 @@ app.controller('logininCtrl',function($scope,$http){
 });
 app.controller('topbarCtrl',function($scope){
 	if(window.uid&&window.token){
-		$scope.href = '#/self';
+		$scope.href = '#/self/selfinfo';
 		$scope.userLogin = '个人中心';
 	}else{
 		$scope.href = '#/login';
@@ -54,7 +54,7 @@ app.controller('selfinfoCtrl',function($scope){
 	$scope.usertype = '车主';
 	$scope.tel = window.tel;
 });
-app.controller('selfbycleinfoCtrl',function($scope,$http){
+app.controller('setbycleinfoCtrl',function($scope,$http){
 	$scope.grade = function(){
 		if(window.uid&&window.token){
 			var fd = new FormData();
@@ -99,4 +99,7 @@ app.controller('settingCtrl',function($scope,$http){
 			alert("请您重新登录一下！");
 		}
 	}
+});
+app.controller("selfbycleinfoCtrl",function($scope,$http,selfbycles){
+	$scope.selfbycles = new selfbycles();
 });

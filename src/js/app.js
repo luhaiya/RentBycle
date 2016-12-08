@@ -79,4 +79,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         	url:'/setting',
         	templateUrl:"template/setting.html"
         })
+        .state('self.selfbycleinfo',{
+        	url:'/selfbycleinfo',
+        	templateUrl:"template/selfbycleinfo.html"
+        })
 });

@@ -24,7 +24,7 @@ class Bycle{
 		$db = new dBoperate('bycleinfo');
 		$this->attr['tags'][] = $para['tags'];
 		$this->attr['price'] = $para['price'];
-		$file = "../src/imgs/User/" . createStringByTime() . 'jpg';
+		$file = "../src/imgs/User/" . createStringByTime() . '.jpg';
 		file_put_contents($file,$para['img']);
 		$this->attr['picurl'][] = $file;
 		$this->attr['picurl'] = json_encode($this->attr['picurl']);
@@ -44,7 +44,7 @@ class Bycle{
 			return false;
 		}	
 	}
-	public function getInfoByUserId($uId){
+	public static function getInfoByUserId($uId){
 		$db = new dBoperate('bycleinfo');
 		$sql = 'select * from bycleinfo where userid='.$uId;
 		$res = $db->query($sql);
@@ -55,13 +55,19 @@ class Bycle{
 			return false;
 		}
 	}
-	public function updateBycleInfo($bycleId){
-	//TODO：用户更新自己自行车的信息
+	public static function changeBycleState($bycleId){
+		$db = new dBoperate('bycleinfo');
+		$sql = 'select state from bycleinfo where bikeid='.$bycleId;
+		$res = $db->query($sql);
+		$state = decbin($res[0]['state']+1)%10;
+		$sql = 'update bycleinfo set state='.$state.' where bikeid='.$bycleId;
+		$db->query($sql);
+		return true;
 	}
 	public function getBikeList(){
 	//TODO:搜索出符合用户需求的自行车
 		$db = new dBoperate('bycleinfo');
-		$sql = 'select * from bycleinfo';
+		$sql = 'select * from bycleinfo where state=0';
 		$res = $db->query($sql);
 		if(!empty($res)){
 			return json_encode($res);
