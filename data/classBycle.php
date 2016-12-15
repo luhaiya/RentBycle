@@ -22,16 +22,19 @@ class Bycle{
 	}
 	public function signBycle($para){
 		$db = new dBoperate('bycleinfo');
-		$this->attr['tags'][] = $para['tags'];
+		$this->attr['tags'][] = urlencode($para['tags']);
 		$this->attr['price'] = $para['price'];
-		$file = "../src/imgs/User/" . createStringByTime() . '.jpg';
-		file_put_contents($file,$para['img']);
-		$this->attr['picurl'][] = $file;
-		$this->attr['picurl'] = json_encode($this->attr['picurl']);
-		$this->attr['tags'] = json_encode($this->attr['tags']);
-		$db->insertData($this->attr);
-		User::upgrade($this->attr);
-		return true;
+		$file = "/src/imgs/User/" . createStringByTime() . '.jpg';
+		if(move_uploaded_file($_FILES['byclepic']['tmp_name'],'..'.$file)){
+			$this->attr['picurl'][] = '//www.luhaiya.com/RentBycle'.$file;
+			$this->attr['picurl'] = json_encode($this->attr['picurl']);
+			$this->attr['tags'] = urldecode(json_encode($this->attr['tags']));
+			$db->insertData($this->attr);
+			User::upgrade($this->attr);
+			return true;
+		}else{
+			return false;
+		}
 	}
 	public static function getInfoByBikeId($bycleId){
 		$db = new dBoperate('bycleinfo');

@@ -36,14 +36,18 @@ switch($command){
 	case 10000:
 		if(!empty($checkUser)){
 			$bike = new Bycle($userId);
-			$tags=isset($data['tags'])?$data['tags']:'';
-			$price=isset($data['price'])?$data['price']:'';
+			$tags=isset($data['descBycle'])?$data['descBycle']:'';
+			$price=isset($data['priceBycle'])?$data['priceBycle']:0;
 			if(!$tags||!$price){
-				$tags = isset($_REQUEST['tags'])?$_REQUEST['tags']:'';
-				$price = isset($_REQUEST['price'])?$_REQUEST['price']:'';
+				$tags = isset($_REQUEST['descBycle'])?$_REQUEST['descBycle']:'';
+				$price = isset($_REQUEST['priceBycle'])?$_REQUEST['priceBycle']:0;
 			}
 			$attr = array("tags"=>$tags,"price"=>$price);
-			echo $bike->signBycle($attr);
+			if($bike->signBycle($attr)){
+				echo "<script>alert('上传成功！');window.location='http://www.luhaiya.com/RentBycle/#/self/selfbycleinfo';</script>";
+			}else{
+				echo "<script>alert('上传失败！');window.location='http://www.luhaiya.com/RentBycle/#/self/setbycleinfo';</script>";
+			}
 		}else{
 			errorInfo(40003);
 			echo false;

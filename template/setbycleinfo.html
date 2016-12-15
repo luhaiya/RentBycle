@@ -10,22 +10,25 @@ $("#selfbar").children("li").eq(3).removeClass('active');
 	<div class="row"><h3><strong>新增车辆</strong></h3></div>
 <div class="row" ng-controller="setbycleinfoCtrl">
     	<div class="col-md-4 col-md-offset-4">
-    	<form role="form">
+    	<form role="form" method="post" action="./data/" enctype="multipart/form-data">
     		<div class="form-group col-md-12">
-			    <input id="byclepic" type="file" file-model="mypic" accept='image/*' style="display:none" required> 
+			    <input id="byclepic" name="byclepic" type="file" accept='image/*' style="display:none;" /> 
 				<div class="input-append"> 
-				<img id="photoCover" alt="预览图片" class="img-responsive" width="100%" heught="auto"/>
+				<img id="photoCover" alt="预览图片" class="img-responsive" width="100%" height="auto"/>
 				<button class="btn btn-default" type="button" onclick="$('input[id=byclepic]').click();">上传图片</button> 
 			</div></div>
 			<div class="form-group col-md-12">
 				<label for="descBycle">描述：</label>
-                <input type="text" class="form-control" ng-model="mydesc" id="descBycle" placeholder="" required>
+                <input type="text" class="form-control" name="descBycle" id="descBycle" placeholder="" required>
+                <input type="hidden" class="form-control" name="cid" value="{{cid}}" />
+                <input type="hidden" class="form-control" name="uid" value="{{uid}}" />
+                <input type="hidden" class="form-control" name="token" value="{{token}}" />
 			</div>
 			<div class="form-group col-md-12">
 				<label for="priceBycle">价格（RMB/天）：</label>
-                <input type="text" class="form-control" ng-model="myprice" id="priceBycle" placeholder="" required>
+                <input type="text" class="form-control" name="priceBycle" id="priceBycle" placeholder="" required>
 			</div>
-			<div class="col-md-12"><button type="submit" class="btn btn-default" ng-click="grade()">提交</button></div>
+			<div class="col-md-12"><input type="submit" class="btn btn-default" value="提交" /></div>
 		</form>
     </div></div>
 </div>

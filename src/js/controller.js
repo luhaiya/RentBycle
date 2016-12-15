@@ -54,31 +54,10 @@ app.controller('selfinfoCtrl',function($scope){
 	$scope.usertype = '车主';
 	$scope.tel = window.tel;
 });
-app.controller('setbycleinfoCtrl',function($scope,$http){
-	$scope.grade = function(){
-		if(window.uid&&window.token){
-			var fd = new FormData();
-			fd.append('img', $scope.mypic);
-			fd.append('cid', 10000);
-			fd.append('uid', window.uid);
-			fd.append('token', window.token);
-			fd.append('tags', $scope.mydesc);
-			fd.append('price', $scope.myprice);
-			$http({
-				method:"post",
-				url:"./data/",
-				data:fd,
-				headers: {'Content-Type':undefined},
-				transformRequest: angular.identity
-			})
-			.success(function(data){
-				if(data){alert("提交成功！");window.location.reload();}else{alert("提交失败1");}
-			})
-			.error(function(data){alert("提交失败2");})
-		}else{
-			alert("请从微信公众号登录");
-		}
-	}
+app.controller('setbycleinfoCtrl',function($scope){
+	$scope.cid = 10000;
+	$scope.uid = window.uid;
+	$scope.token = window.token;
 });
 app.controller('settingCtrl',function($scope,$http){
 	$scope.modify = function(){
