@@ -17,7 +17,7 @@ class Bycle{
 				'tags'=>array(),
 				'brand'=>'',
 				'price'=>'',
-				'state'=>1,
+				'state'=>0,
 		);
 	}
 	public function signBycle($para){
@@ -25,7 +25,9 @@ class Bycle{
 		$this->attr['tags'][] = urlencode($para['tags']);
 		$this->attr['price'] = $para['price'];
 		$file = "/src/imgs/User/" . createStringByTime() . '.jpg';
-		if(move_uploaded_file($_FILES['byclepic']['tmp_name'],'..'.$file)){
+		if($para['img']){
+			$img = base64_decode($para['img']);
+			file_put_contents('..'.$file,$img);
 			$this->attr['picurl'][] = '//www.luhaiya.com/RentBycle'.$file;
 			$this->attr['picurl'] = json_encode($this->attr['picurl']);
 			$this->attr['tags'] = urldecode(json_encode($this->attr['tags']));
@@ -33,7 +35,17 @@ class Bycle{
 			User::upgrade($this->attr);
 			return true;
 		}else{
-			return false;
+			if(move_uploaded_file($_FILES['byclepic']['tmp_name'],'..'.$file)){
+				zipPic('..'.$file);
+				$this->attr['picurl'][] = '//www.luhaiya.com/RentBycle'.$file;
+				$this->attr['picurl'] = json_encode($this->attr['picurl']);
+				$this->attr['tags'] = urldecode(json_encode($this->attr['tags']));
+				$db->insertData($this->attr);
+				User::upgrade($this->attr);
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 	public static function getInfoByBikeId($bycleId){

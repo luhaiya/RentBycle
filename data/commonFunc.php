@@ -76,3 +76,99 @@ function errorInfo($errid){
 	}
 	return json_encode($error);
 }
+function zipPic($img,$maxW='300',$maxH='300'){
+	$ImgInfo=GetImageSize($img);
+	switch($ImgInfo[2]){
+		case 1:
+			$newimg = @ImageCreateFromGIF($img);
+			break;
+		case 2:
+			$newimg = @ImageCreateFromJPEG($img);
+			break;
+		case 3:
+			$newimg = @ImageCreateFromPNG($img);
+			break;
+		default:
+			$newimg = @ImageCreateFromJPEG($img);
+			break;
+	}
+	$w = ImagesX($newimg);
+	$h = ImagesY($newimg);
+	$width = ImagesX($newimg);
+	$height = ImagesY($newimg);
+	if($width>$maxW){
+		$Par = $maxW/$width;
+		$width = $maxW;
+		$height = $height*$Par;
+		if($height>$maxH){
+			$Par=$maxH/$height;
+			$height=$maxH;
+			$width=$width*$Par;
+		}
+	}
+	if($height>$maxH){
+		$Par=$maxH/$height;
+		$height=$maxH;
+		$width=$width*$Par;
+		if($width>$maxW){
+			$Par = $maxW/$width;
+			$width = $maxW;
+			$height = $height*$Par;
+		}
+	}
+	$nImg = ImageCreateTrueColor($width,$height);
+	ImageCopyReSampled($nImg,$newimg,0,0,0,0,$width,$height,$w,$h);
+	ImageJpeg ($nImg,$img);
+	return true;
+}
+//拆分词语为单个字符
+function split_name($name) {
+	preg_match_all("/./u", $name, $arr);
+	return $arr[0];
+}
+//最长公共子序列
+function LCS($str_1, $str_2) {
+	$len_1 = strlen($str_1);
+	$len_2 = strlen($str_2);
+	$len = $len_1 > $len_2 ? $len_1 : $len_2;
+	$dp = array();
+	for ($i = 0; $i <= $len; $i++) {
+		$dp[$i] = array();
+		$dp[$i][0] = 0;
+		$dp[0][$i] = 0;
+	}
+	for ($i = 1; $i <= $len_1; $i++) {
+		for ($j = 1; $j <= $len_2; $j++) {
+			if ($str_1[$i - 1] == $str_2[$j - 1]) {
+				$dp[$i][$j] = $dp[$i - 1][$j - 1] + 1;
+			} else {
+				$dp[$i][$j] = $dp[$i - 1][$j] > $dp[$i][$j - 1] ? $dp[$i - 1][$j] : $dp[$i][$j - 1];
+			}
+		}
+	}
+	return $dp[$len_1][$len_2];
+}
+function sortByKeyword($data,$key){
+	$sort_list = array();
+	if (mb_strlen($key, 'utf-8') != strlen($key)) { // 是否全英文字符
+		$arr_1 = array_unique(split_name($key));
+		foreach ($data as $k=>$v) {
+			$value = implode(',',$v);
+			$arr_2 = array_unique(split_name($value));
+			$similarity = count($arr_2) - count(array_diff($arr_2, $arr_1));
+			$sort_list[$k] = $similarity;
+		}
+	} else {
+		foreach ($data as $k=>$v) {
+			$value = implode(',',$v);
+			$similarity = LCS($key, $value);
+			$sort_list[$k] = $similarity;
+		}
+	}
+	arsort($sort_list);
+	$res = array();
+	foreach($sort_list as $k=>$v){
+		$res[] = $data[$k];
+	}
+	return $res;
+}

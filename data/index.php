@@ -38,15 +38,17 @@ switch($command){
 			$bike = new Bycle($userId);
 			$tags=isset($data['descBycle'])?$data['descBycle']:'';
 			$price=isset($data['priceBycle'])?$data['priceBycle']:0;
+			$img = isset($data['byclepic'])?$data['byclepic']:'';
 			if(!$tags||!$price){
 				$tags = isset($_REQUEST['descBycle'])?$_REQUEST['descBycle']:'';
 				$price = isset($_REQUEST['priceBycle'])?$_REQUEST['priceBycle']:0;
+				$img = isset($_REQUEST['byclepic'])?$_REQUEST['byclepic']:'';
 			}
-			$attr = array("tags"=>$tags,"price"=>$price);
+			$attr = array("tags"=>$tags,"price"=>$price,'img'=>$img);
 			if($bike->signBycle($attr)){
-				echo "<script>alert('上传成功！');window.location='http://www.luhaiya.com/RentBycle/#/self/selfbycleinfo';</script>";
+				echo true;
 			}else{
-				echo "<script>alert('上传失败！');window.location='http://www.luhaiya.com/RentBycle/#/self/setbycleinfo';</script>";
+				echo false;
 			}
 		}else{
 			errorInfo(40003);
@@ -59,6 +61,10 @@ switch($command){
 		$keyword = isset($data['keyword'])?$data['keyword']:'';
 		if(!$keyword){
 			$keyword = isset($_REQUEST['keyword'])?$_REQUEST['keyword']:'';
+		}
+		$page = isset($data['page'])?$data['page']:0;
+		if(!$page){
+			$page = isset($_REQUEST['page'])?$_REQUEST['page']:0;
 		}
 		$data = array();
 		foreach($temp as $k=>$v){
@@ -74,13 +80,15 @@ switch($command){
 					'price'=>'￥'.$v['price'],
 			);
 		}
-		$page = isset($data['page'])?$data['page']:0;
-		if(!$page){
-			$page = isset($_REQUEST['page'])?$_REQUEST['page']:0;
-		}
 		$last=$page*4+4;
-		$data = array_slice($data, 0, $last);
-		echo json_encode($data);
+		if($keyword){
+			$rank = sortByKeyword($data,$keyword,$last);
+			$rank = array_slice($rank, 0, $last);
+			echo json_encode($rank);
+		}else{
+			$data = array_slice($data, 0, $last);
+			echo json_encode($data);
+		}
 		break;
 	case 10002:
 		$bikeId = isset($_REQUEST['bid'])?$_REQUEST['bid']:0;
@@ -184,6 +192,10 @@ switch($command){
 		if(!empty($checkUser)){
 			$temp = json_decode(Bycle::getInfoByUserId($userId),true);
 			$state = array('未租出','已租出');
+			$type = isset($data['type'])?$data['type']:0;
+			if(!$type){
+				$type = isset($_REQUEST['type'])?$_REQUEST['type']:0;
+			}
 			$data = array();
 			foreach($temp as $k=>$v){
 				$desc = '';
@@ -202,10 +214,6 @@ switch($command){
 			$maxPage = ceil(count($data)/4)-1;
 			session_start();
 			$page = isset($_SESSION['page'])?$_SESSION['page']:0;
-			$type = isset($data['type'])?$data['type']:0;
-			if(!$type){
-				$type = isset($_REQUEST['type'])?$_REQUEST['type']:0;
-			}
 			if($type == 0){
 				$page = 0;
 			}
@@ -240,8 +248,13 @@ switch($command){
 			$_SESSION['token'] = $userinfo['token'];
 			$_SESSION['uid'] = $userinfo['userid'];
 			$_SESSION['tel'] = $userinfo['tel'];
-			header("Location: http://www.luhaiya.com/RentBycle/#/rent");
-			exit;
+			if($_REQUEST['state']=='bupt1'){
+				header("Location: http://www.luhaiya.com/RentBycle/#/self/selfbycleinfo");
+				exit;
+			}else{
+				header("Location: http://www.luhaiya.com/RentBycle/#/rent");
+				exit;
+			}
 		}else{
 			header("Location: http://www.luhaiya.com/RentBycle/#/rent");
 			exit;

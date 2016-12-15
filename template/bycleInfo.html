@@ -18,7 +18,7 @@ $("#topbar").children("li").eq(2).removeClass('active');
 </div>
 <div class="row" style="padding-top:10px">
 <div infinite-scroll='bycles.loadmore()' infinite-scroll-disabled='bycles.loading' infinite-scroll-distance='0'>
-   <div class="col-xs-6 col-md-3" ng-repeat="bycle in bycles.bycleList track by bycle.id"><div style="padding-top:20px;">
+   <div class="col-xs-6 col-md-3" ng-repeat="bycle in bycles.bycleList track by $index"><div style="padding-top:20px;">
        <div><img class="img-responsive" ng-src="{{bycle.src}}" width="100%" height="auto" alt="loading...">
        <div ng-bind="bycle.desc" style="color:black;height:100px;overflow: hidden;text-overflow: ellipsis;text-overflow: -o-ellipsis-lastline;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient: vertical;"></div>
        <div ng-bind="bycle.price" style="color:red;display:inline-block;"></div>

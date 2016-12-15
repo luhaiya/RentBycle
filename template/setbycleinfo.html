@@ -15,6 +15,7 @@ $("#selfbar").children("li").eq(3).removeClass('active');
 			    <input id="byclepic" name="byclepic" type="file" accept='image/*' style="display:none;" /> 
 				<div class="input-append"> 
 				<img id="photoCover" alt="预览图片" class="img-responsive" width="100%" height="auto"/>
+				<canvas id="uploadImg" style="display:none"></canvas>
 				<button class="btn btn-default" type="button" onclick="$('input[id=byclepic]').click();">上传图片</button> 
 			</div></div>
 			<div class="form-group col-md-12">
@@ -28,7 +29,7 @@ $("#selfbar").children("li").eq(3).removeClass('active');
 				<label for="priceBycle">价格（RMB/天）：</label>
                 <input type="text" class="form-control" name="priceBycle" id="priceBycle" placeholder="" required>
 			</div>
-			<div class="col-md-12"><input type="submit" class="btn btn-default" value="提交" /></div>
+			<div class="col-md-12"><input type="button" onclick="upload()" class="btn btn-default" value="提交" /></div>
 		</form>
     </div></div>
 </div>
@@ -43,7 +44,48 @@ function setImagePreview(){
     var docObj=document.getElementById(doc);
     var imgObjPreview=document.getElementById(preview);
     if(docObj.files &&docObj.files[0]){
-        imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+    	var file = docObj.files[0];
+    	if(file.size>4194304){
+    		alert("上传图片请小于4M");
+    		return false;
+    	}
+    	var reader = new FileReader();
+    	reader.readAsDataURL(file);
+    	reader.onload = function(e){
+    		createCanvas(this.result);
+    	}
+        //imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
     }
+}
+function createCanvas(src){
+	var canvas = document.getElementById("uploadImg");
+	var cxt = canvas.getContext('2d');
+	canvas.width = 640;
+	canvas.height = 640;
+	var img = new Image();
+	img.src = src;
+	img.onload = function() {
+		cxt.drawImage(img, 0, 0,640,640);
+		$("#photoCover").show().attr('src', canvas.toDataURL("image/jpeg", 0.5));
+		window.str = canvas.toDataURL("image/jpeg", 0.1);
+	}
+}
+function upload(){
+	$.ajax({
+		url: "./data/",
+		type: "POST",
+		data: {
+			"byclepic": window.str.split(',')[1],
+			"cid": 10000,
+			"uid": window.uid,
+			"token": window.token,
+			"descBycle": $("#descBycle").val(),
+			"priceBycle": $("#priceBycle").val()
+		},
+		success: function(data) {
+			alert("上传成功！");
+			window.location = 'http://www.luhaiya.com/RentBycle/#/self/selfbycleinfo';
+		}
+	});
 }
 </script>

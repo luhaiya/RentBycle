@@ -166,10 +166,11 @@ class Weixin{
 		}
 	}
 	public function rentToUser($attr){
+		$url = 'https://www.luhaiya.com/RentBycle/data';
 		$data = array(
 				"touser"=>$attr['wxid'],
 				"template_id"=>tpid,
-				"url"=>"http://www.luhaiya.com/RentBycle/#/self/selfbycleinfo",
+				"url"=>'https://open.weixin.qq.com/connect/oauth2/authorize?appid='.$this->appId.'&redirect_uri='.$url.'&response_type=code&scope=snsapi_userinfo&state=bupt1#wechat_redirect',
 				"topcolor"=>"#FF0000",
 				"data"=>array(
 						"tel"=>array("value"=>$attr['tel'],"color"=>"#173177"),
