@@ -7,13 +7,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/home',
             views: {
                 '': {
-                    templateUrl: "template/home.html"
+                    templateUrl: "template/rent.html"
                 },
                 'topbar@home': {
                     templateUrl: "template/topbar.html"
                 },
-                'lunbopic@home': {
-                    templateUrl: "template/lunbopic.html"
+                'bycleInfo@home': {
+                    templateUrl: "template/bycleInfo.html"
                 }
             }
         })
