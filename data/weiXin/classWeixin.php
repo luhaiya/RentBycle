@@ -81,7 +81,7 @@ class Weixin{
 			case 'click':
 				switch($postObj->EventKey){
 					case 'about':
-						$data = array('text'=>'about us');
+						$data = array('text'=>'欢迎使用北邮自行车租赁平台BikeRent，想要租车请点击"微信登录"哦！我们是：北邮信通院-陆海亚、卜淑晴、乔尚兵');
 						echo $this->createXml('text',$data);
 						break;
 					case 'talk':
